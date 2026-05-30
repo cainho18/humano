@@ -1,26 +1,152 @@
 @import "tailwindcss";
 
+/* ── PALETA HUMANWARE — ESTRITA (só estas 4 cores) ─────────────── */
+@theme {
+  --color-rosa: #ff00aa; /* Heartstorm — assinatura, impacto */
+  --color-amarelo: #ffff00; /* Jester — provocação, hover, acentos */
+  --color-claro: #f2f2f2; /* textos sobre escuro, fundos claros */
+  --color-preto: #000000; /* fundo de abertura, textos sobre claro */
+
+  --font-display: var(--font-display);
+  --font-mono: var(--font-mono);
+  --font-serif: var(--font-serif);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: dark;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  background-color: var(--color-preto);
+  color: var(--color-claro);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-display), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Seleção na cor-assinatura */
+::selection {
+  background: var(--color-rosa);
+  color: var(--color-claro);
+}
+
+/* Scrollbar discreta na paleta */
+* {
+  scrollbar-color: var(--color-rosa) transparent;
+}
+
+/* ── Acessibilidade: respeitar prefers-reduced-motion ──────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Helper: foco visível sempre (botões ritualizados) */
+:focus-visible {
+  outline: 2px solid var(--color-amarelo);
+  outline-offset: 3px;
+}
+
+/* ── Keyframes utilitários ─────────────────────────────────────── */
+@keyframes hw-pulse-down {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translateY(8px);
+    opacity: 1;
+  }
+}
+
+.hw-bounce {
+  animation: hw-pulse-down 1.6s ease-in-out infinite;
+}
+
+@keyframes hw-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  94% {
+    opacity: 0.4;
+  }
+  96% {
+    opacity: 1;
+  }
+}
+
+@keyframes hw-perspective-blur-in {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: translateY(0);
+  }
+}
+
+.hw-perspective-in {
+  animation: hw-perspective-blur-in 0.6s ease-out both;
+}
+
+/* Carta flip 3D */
+.hw-flip-scene {
+  perspective: 1400px;
+}
+.hw-flip-inner {
+  transform-style: preserve-3d;
+  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.hw-flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+.hw-flip-face {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.hw-flip-back {
+  transform: rotateY(180deg);
+}
+
+/* Slider bipolar / alocador de pontos */
+.hw-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: var(--color-claro);
+  border: 2px solid var(--color-rosa);
+  cursor: pointer;
+  margin-top: -10px;
+}
+.hw-range::-moz-range-thumb {
+  height: 22px;
+  width: 22px;
+  border-radius: 9999px;
+  background: var(--color-claro);
+  border: 2px solid var(--color-rosa);
+  cursor: pointer;
+}
+.hw-range:focus-visible::-webkit-slider-thumb {
+  outline: 2px solid var(--color-amarelo);
+  outline-offset: 2px;
 }

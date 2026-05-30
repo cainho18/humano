@@ -1,36 +1,99 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Humanware V2
 
-## Getting Started
+Um portal interativo para o universo "gravidade zero" da GZero. Não é um
+formulário corporativo: é um diagnóstico vivo, narrado pelo **Bobo da Corte**,
+em linguagem GZero (informal-poética). A pessoa atravessa o espelho, responde a
+cenas e perguntas, e recebe uma "fotografia" do arquétipo da sua organização.
 
-First, run the development server:
+## Stack
+
+- **Next.js 16** (App Router, Turbopack) + **React 19** + **TypeScript** (strict)
+- **Tailwind CSS v4** (CSS-first, `@theme` em `app/globals.css`)
+- Componentes estilo shadcn em `components/ui`
+- **motion** / **framer-motion** para as animações e efeitos de transição
+
+> ⚠️ Esta versão do Next.js tem breaking changes em relação ao seu conhecimento
+> prévio. Antes de mexer no código, consulte os guias em
+> `node_modules/next/dist/docs/`.
+
+## Paleta (inegociável)
+
+Apenas quatro cores, expostas como tokens no `@theme`:
+
+| Token    | Hex       | Uso                          |
+| -------- | --------- | ---------------------------- |
+| `rosa`   | `#FF00AA` | Heartstorm / destaque, CTAs  |
+| `amarelo`| `#FFFF00` | Bobo / foco, outline         |
+| `claro`  | `#F2F2F2` | Texto/fundo claro            |
+| `preto`  | `#000000` | Fundo escuro                 |
+
+Nenhuma outra cor entra no projeto — cores de componentes de referência foram
+substituídas por estas.
+
+## Rodando
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Outros scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build         # build de produção
+npm run lint          # eslint
+npm run test:scoring  # regressão das 8 fixtures do motor de scoring
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Fluxo
 
-## Learn More
+Tudo acontece em uma única rota (`/`) como máquina de estados client-side
+(índice de passo em `lib/state/AnswersContext.tsx`; ordem canônica em
+`lib/flow/steps.ts`):
 
-To learn more about Next.js, take a look at the following resources:
+1. **Abertura** — contador 0→100 → portal (HUMANWARE) → manifesto ("Atravessar")
+2. **Entrada** — perfil (nome, cargo, pronome) → acordo (LGPD)
+3. **Blocos de perguntas** intercalados com **7 transições do Bobo**, cada uma
+   com um efeito visual diferente:
+   - T1 Perspective · T2 trembling lines · T3 Nokia webcam · T4 Glitch ·
+     T5 gooey Drag · T6 proximity · T7 Perspective
+4. **4 cartas** (flip 3D): cômodo, fora/dentro, cena, nome secreto
+5. **Final** — fotografia do arquétipo (mock por enquanto)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+As respostas são coletadas em memória e, ao final, **`console.log`'adas** via
+`logSession()` (procure por `[HUMANWARE] sessão concluída` no console).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Vocativo dinâmico
 
-## Deploy on Vercel
+O pronome escolhido na entrada define como o Bobo se dirige à pessoa
+(`lib/vocative.ts`): `ele` → "Irmão", `ela` → "Amiga", `outro` /
+`prefiro_nao_dizer` → neutro (sem vocativo de gênero).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Acessibilidade & mobile
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Todos os efeitos respeitam `prefers-reduced-motion` (`lib/useReducedMotion.ts`,
+  via `useSyncExternalStore`) com fallbacks estáticos.
+- Inputs e transições funcionam em toque/mobile (a Nokia cam usa a câmera
+  traseira no celular; drag e sliders são pointer-based).
+
+## Motor de scoring (`lib/scoring`)
+
+Módulo **isolado** que implementa o cálculo do briefing 2 (13 dimensões,
+QE, coerência discurso×prática, regra de compensação, detecção de arquétipo por
+proximidade a protótipos, modificadores, meta-indicadores e narrativa-template).
+
+- **Não está acoplado à UI** — a tela final usa um mock. O motor existe pronto
+  para ser plugado depois.
+- Importa tipos por caminho relativo (`../types`), então é autossuficiente.
+- Regressão: `npm run test:scoring` roda 8 fixtures offline (sem framework) e
+  cada uma deve produzir o arquétipo esperado.
+
+```
+lib/scoring/
+  config.ts       # pesos, bandas, protótipos
+  dimensions.ts   # normalização + agregação das dimensões
+  index.ts        # scoreSession() — pipeline completo
+  narrative.ts    # textos de abertura/fechamento por arquétipo
+  fixtures.ts     # 8 casos de teste
+  verify.ts       # runner de regressão
+```
