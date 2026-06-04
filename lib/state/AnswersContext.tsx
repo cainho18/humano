@@ -39,6 +39,8 @@ interface AnswersCtx {
   step: Step;
   next: () => void;
   back: () => void;
+  goTo: (index: number) => void;
+  maxReached: number;
   canBack: boolean;
   totalSteps: number;
 
@@ -64,6 +66,7 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
   });
   const [respostas, setRespostas] = useState<Answers>(emptyAnswers);
   const [stepIndex, setStepIndex] = useState(0);
+  const [maxReached, setMaxReached] = useState(0);
   const [jesterPopup, setJesterPopup] = useState<string | null>(null);
 
   // bobo telemetry
@@ -154,13 +157,29 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
   const dismissJester = useCallback(() => setJesterPopup(null), []);
 
   const next = useCallback(() => {
-    setStepIndex((i) => Math.min(i + 1, STEPS.length - 1));
+    setStepIndex((i) => {
+      const n = Math.min(i + 1, STEPS.length - 1);
+      setMaxReached((m) => Math.max(m, n));
+      return n;
+    });
     setJesterPopup(null);
   }, []);
   const back = useCallback(() => {
     setStepIndex((i) => Math.max(i - 1, 0));
     setJesterPopup(null);
   }, []);
+  /** Pula direto pra uma etapa já visitada (mapa retrô). */
+  const goTo = useCallback(
+    (index: number) => {
+      const target = Math.max(0, Math.min(index, STEPS.length - 1));
+      // só permite ir pra onde já passou
+      if (target <= maxReached) {
+        setStepIndex(target);
+        setJesterPopup(null);
+      }
+    },
+    [maxReached]
+  );
 
   const voc = useCallback(
     (text: string) => applyVocative(text, perfil.pronome),
@@ -190,6 +209,8 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
       step: STEPS[stepIndex],
       next,
       back,
+      goTo,
+      maxReached,
       canBack: stepIndex > 0,
       totalSteps: STEPS.length,
       voc,
@@ -214,6 +235,8 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
       stepIndex,
       next,
       back,
+      goTo,
+      maxReached,
       voc,
       jesterPopup,
       noteAnswer,

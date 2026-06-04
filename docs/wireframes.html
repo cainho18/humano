@@ -1,0 +1,548 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Humanware V2 — Telas (mobile + desktop)</title>
+<style id="appcss">
+  :root{
+    --rosa:#FF00AA; --amarelo:#FFFF00; --claro:#F2F2F2; --preto:#000000;
+    --c50:rgba(242,242,242,.5); --c30:rgba(242,242,242,.3);
+    --c25:rgba(242,242,242,.22); --c15:rgba(242,242,242,.15); --c70:rgba(242,242,242,.7);
+    --pageink:#1a1a1a; --pagemut:#6b6b6b; --pageline:#d8d8d8; --pagebg:#eeeeee;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--pagebg);color:var(--pageink);
+    font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1320px;margin:0 auto;padding:36px 24px 140px}
+
+  .doc-head{border-bottom:2px solid var(--pageink);padding-bottom:22px}
+  .doc-head h1{font-size:30px;margin:0 0 6px;letter-spacing:-.5px}
+  .doc-head p{margin:4px 0;color:var(--pagemut);font-size:14px;max-width:78ch;line-height:1.55}
+  .legend{display:flex;flex-wrap:wrap;gap:16px;margin-top:16px;font-size:12px;color:var(--pagemut)}
+  .legend .item{display:flex;align-items:center;gap:7px}
+  .sw{width:14px;height:14px;border:1px solid #aaa;border-radius:3px}
+  .toolbar{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+  .tbtn{border:1.5px solid var(--pageink);background:#fff;border-radius:8px;padding:8px 14px;
+    font-size:12.5px;font-weight:600;cursor:pointer}
+  .tbtn:hover{background:var(--pageink);color:#fff}
+
+  .badge{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--pageline)}
+  .badge.fx{background:#111;color:#fff;border-color:#111}
+  .badge.input{background:#fff;color:#333}
+
+  .group-title{margin:50px 0 6px;font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--pagemut)}
+  .group-rule{height:1px;background:var(--pageline);margin-bottom:6px}
+
+  .screen{background:#fff;border:1px solid var(--pageline);border-radius:14px;
+    padding:22px 24px 26px;margin-top:22px;page-break-inside:avoid}
+  .meta .num{font-size:12px;color:var(--pagemut);font-weight:700;letter-spacing:.08em}
+  .meta h3{margin:2px 0 10px;font-size:20px;letter-spacing:-.2px}
+  .meta .tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .meta .notes{font-size:13px;line-height:1.6;color:#3a3a3a;max-width:90ch}
+  .meta .notes b{color:#000}
+  .meta ul{margin:8px 0 0;padding-left:18px;max-width:90ch}
+  .meta li{font-size:13px;line-height:1.55;margin-bottom:3px;color:#3a3a3a}
+
+  .frames{display:flex;flex-wrap:wrap;gap:34px;margin-top:20px;align-items:flex-start}
+  .framewrap{display:flex;flex-direction:column;gap:10px;align-items:center}
+  .framecap{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--pagemut);font-weight:700}
+  .exp{border:1.5px solid #333;background:#fff;border-radius:7px;padding:6px 12px;font-size:11.5px;
+    font-weight:600;cursor:pointer;color:#222}
+  .exp:hover{background:#333;color:#fff}
+
+  /* ---------- device chrome (neutral, not part of product palette) ---------- */
+  .device{background:#0d0d0d;border:1px solid #333;overflow:hidden}
+  .device.m{width:284px;border-radius:30px;padding:10px}
+  .device.d{width:640px;border-radius:14px;padding:0}
+  .osbar-m{display:flex;justify-content:center;padding:4px 0 8px}
+  .osbar-m .notch{width:90px;height:6px;border-radius:99px;background:#3a3a3a}
+  .osbar-d{display:flex;align-items:center;gap:6px;height:26px;padding:0 12px;background:#1c1c1c}
+  .osbar-d .dot{width:9px;height:9px;border-radius:50%;background:#3f3f3f}
+  .osbar-d .url{margin-left:10px;font-size:10px;color:#666;font-family:ui-monospace,Menlo,monospace}
+
+  /* ---------- the actual product viewport ---------- */
+  .vp{background:var(--preto);color:var(--claro);display:flex;flex-direction:column;gap:12px;
+    font-family:ui-sans-serif,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .device.m .vp{border-radius:22px;min-height:520px;padding:20px 16px 22px}
+  .device.d .vp{min-height:392px;padding:34px 40px 30px;align-items:center}
+  .vp.d > *{width:100%;max-width:500px}
+  .vp.center{justify-content:center;align-items:center;text-align:center}
+  .vp.rosa{background:var(--rosa);padding:0}
+
+  /* progress (discreet, rosa) */
+  .prog{height:3px;width:100%;background:var(--c15);border-radius:99px;overflow:hidden;max-width:none}
+  .prog > i{display:block;height:100%;background:var(--rosa)}
+
+  .t-kicker{font-size:9.5px;letter-spacing:.22em;text-transform:uppercase;color:var(--c50);font-family:ui-monospace,Menlo,monospace}
+  .t-title{font-size:16px;font-weight:700;line-height:1.25;color:var(--claro)}
+  .t-body{font-size:12px;line-height:1.55;color:var(--c70)}
+  .vp.d .t-title{font-size:20px}.vp.d .t-body{font-size:13.5px}.vp.d .t-kicker{font-size:10.5px}
+
+  .jester{display:flex;gap:9px;align-items:flex-start;border:1px dashed var(--c30);border-radius:11px;padding:11px}
+  .jester .face{font-size:18px;line-height:1}
+  .jester .txt{font-size:11.5px;line-height:1.55;color:var(--claro);font-style:italic}
+  .vp.d .jester .txt{font-size:13.5px}
+  .hl{background:var(--amarelo);color:#000;padding:0 3px;border-radius:2px;font-style:normal;font-weight:600}
+
+  .opts{display:flex;flex-direction:column;gap:7px}
+  .vp.d .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:640px}
+  .opt{border:1px solid var(--c25);border-radius:9px;padding:9px 10px;font-size:11px;line-height:1.4;
+    color:var(--c70);display:flex;gap:8px;align-items:flex-start}
+  .opt .k{font-weight:700;color:var(--c50);font-family:ui-monospace,Menlo,monospace}
+  .opt.sel{border-color:var(--rosa);background:var(--rosa);color:#000;font-weight:600}
+  .opt.sel .k{color:#000}
+  .vp.d .opt{font-size:12px}
+
+  .lbl{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--c50);font-family:ui-monospace,Menlo,monospace}
+  .inputline{border-bottom:2px solid var(--c25);padding-bottom:7px;font-size:13px;color:var(--c30)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:7px}
+  .chip{border:1.5px solid var(--c30);border-radius:7px;padding:6px 11px;font-size:11px;color:var(--c70)}
+  .chip.sel{border-color:var(--rosa);background:var(--rosa);color:#000;font-weight:600}
+
+  .btn{margin-top:auto;align-self:flex-start;border:2px solid var(--rosa);border-radius:7px;
+    padding:9px 18px;font-size:12px;font-weight:700;letter-spacing:.03em;background:var(--rosa);color:#000}
+  .btn.ghost{background:transparent;color:var(--rosa)}
+  .btn.disabled{opacity:.35}
+  .btn.full{align-self:stretch;text-align:center}
+  .vp.d .btn{align-self:center}
+
+  .slider{margin:2px 0}
+  .slider .ends{display:flex;justify-content:space-between;font-size:10.5px;color:var(--c70)}
+  .slider .rail{height:4px;background:var(--c25);border-radius:99px;position:relative;margin:9px 0}
+  .slider .knob{position:absolute;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;
+    border-radius:50%;background:var(--claro);border:2px solid var(--rosa)}
+
+  .bar{display:flex;flex-direction:column;gap:4px}
+  .bar .row{display:flex;justify-content:space-between;font-size:9.5px;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--c50);font-family:ui-monospace,Menlo,monospace}
+  .bar .row b{color:var(--claro);font-weight:700}
+  .bar .track{height:6px;background:var(--c15);border-radius:99px;overflow:hidden}
+  .bar .fill{height:100%;background:var(--rosa)}
+
+  .alloc{display:flex;flex-direction:column;gap:8px}
+  .alloc .arow{display:flex;align-items:center;gap:9px}
+  .alloc .aname{font-size:10.5px;color:var(--c70);flex:1}
+  .alloc .pts{font-size:11px;color:var(--claro);font-weight:700;width:28px;text-align:right;font-family:ui-monospace,Menlo,monospace}
+  .alloc .mini{flex:1.3;height:4px;background:var(--c15);border-radius:99px;overflow:hidden}
+  .alloc .mini > i{display:block;height:100%;background:var(--rosa)}
+  .remain{font-size:10.5px;color:var(--c50);text-align:right;font-family:ui-monospace,Menlo,monospace}
+
+  .likert{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+  .likert .cell{border:1px solid var(--c25);border-radius:6px;height:30px;display:flex;align-items:center;
+    justify-content:center;font-size:8.5px;color:var(--c50);text-align:center;line-height:1.1;padding:2px}
+  .likert .cell.sel{border-color:var(--rosa);background:rgba(255,0,170,.18);color:var(--claro)}
+
+  .pool{display:flex;flex-wrap:wrap;gap:6px}
+  .word{border:1px solid var(--c30);border-radius:99px;padding:5px 10px;font-size:10px;color:var(--c70)}
+  .word.y{border-color:var(--amarelo);color:var(--amarelo)}
+  .slot{border:1px dashed var(--c30);border-radius:9px;padding:8px;min-height:34px}
+  .slot .slbl{font-size:8.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--c50);margin-bottom:5px;font-family:ui-monospace,Menlo,monospace}
+
+  .flip{flex:1;border:1.5px solid var(--c30);border-radius:14px;display:flex;flex-direction:column;
+    align-items:center;justify-content:center;gap:12px;min-height:240px;background:#0a0a0a;padding:18px}
+  .flip .card-face{font-size:40px}
+  .textarea{border:1px solid var(--c25);border-radius:9px;min-height:74px;padding:9px;font-size:10.5px;color:var(--c30)}
+
+  .counter{font-size:72px;font-weight:800;font-variant-numeric:tabular-nums;color:var(--claro);
+    font-family:ui-monospace,Menlo,monospace}
+  .logo-rosa{background:var(--rosa);color:var(--claro);width:100%;height:100%;flex:1;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;min-height:inherit}
+  .logo-big{font-size:32px;font-weight:800;letter-spacing:-1px}
+  .vp.d .logo-big{font-size:46px}
+  .down{font-size:12px;border:1.5px solid var(--claro);border-radius:7px;padding:7px 16px;color:var(--claro)}
+
+  .arqcard{border:2px solid var(--rosa);border-radius:11px;padding:14px}
+  .arqcard .nm{font-size:22px;font-weight:800;letter-spacing:-.3px;color:var(--claro);margin:4px 0}
+  .vp.d .arqcard .nm{font-size:28px}
+  .warn{font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,0,.7);font-family:ui-monospace,Menlo,monospace}
+
+  @media print{
+    body{background:#fff}
+    .toolbar,.exp{display:none}
+    .screen{border-color:#ddd}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="doc-head">
+    <h1>Humanware V2 — Telas</h1>
+    <p>Fluxo completo do diagnóstico GZero, narrado pelo Bobo da Corte. Cada tela aparece em
+       <b>duas versões — mobile e desktop</b> — já nas <b>cores da marca</b>. O copy é o real, em
+       linguagem GZero (não reescrever pra formal). Use os botões <b>⬇ PNG</b> pra exportar cada mockup.</p>
+    <p>Tela única (rota <code>/</code>), navegação linear por <b>23 passos</b>. Cada transição do Bobo usa um
+       efeito visual diferente. Mobile-first; respeita <code>prefers-reduced-motion</code>.</p>
+
+    <div class="legend">
+      <span class="item"><b>Paleta (única):</b></span>
+      <span class="item"><span class="sw" style="background:#FF00AA"></span>#FF00AA rosa</span>
+      <span class="item"><span class="sw" style="background:#FFFF00"></span>#FFFF00 amarelo</span>
+      <span class="item"><span class="sw" style="background:#F2F2F2"></span>#F2F2F2 claro</span>
+      <span class="item"><span class="sw" style="background:#000"></span>#000000 preto</span>
+      <span class="item">·</span>
+      <span class="item"><span class="badge fx">EFEITO</span> transição animada</span>
+      <span class="item"><span class="badge input">INPUT</span> tipo de resposta</span>
+    </div>
+
+    <div class="toolbar">
+      <button class="tbtn" onclick="exportAll('m')">⬇ Baixar todas (mobile)</button>
+      <button class="tbtn" onclick="exportAll('d')">⬇ Baixar todas (desktop)</button>
+      <span style="font-size:11.5px;color:var(--pagemut);align-self:center">
+        (o navegador pode pedir pra permitir múltiplos downloads)</span>
+    </div>
+  </div>
+
+  <div id="root"></div>
+</div>
+
+<script src="vendor/html2canvas.min.js"></script>
+<script>
+const HL = (s, words=[]) => { let o=s; words.forEach(w=>{o=o.replaceAll(w,`<span class="hl">${w}</span>`)}); return o; };
+
+const R = {
+  prog: pct => `<div class="prog"><i style="width:${pct}%"></i></div>`,
+  kicker: t => `<div class="t-kicker">${t}</div>`,
+  title: t => `<div class="t-title">${t}</div>`,
+  body: t => `<div class="t-body">${t}</div>`,
+  jester: (t,hl=[]) => `<div class="jester"><div class="face">🃏</div><div class="txt">${HL(t,hl)}</div></div>`,
+  lbl: t => `<div class="lbl">${t}</div>`,
+  inputline: ph => `<div class="inputline">${ph}</div>`,
+  opts: arr => `<div class="opts">${arr.map((o,i)=>`<div class="opt ${o.sel?'sel':''}"><span class="k">${"abcd"[i]}</span><span>${o.t}</span></div>`).join("")}</div>`,
+  chips: arr => `<div class="chips">${arr.map(c=>`<span class="chip ${c.sel?'sel':''}">${c.t}</span>`).join("")}</div>`,
+  slider: (l,r,pct=50) => `<div class="slider"><div class="ends"><span>${l}</span><span>${r}</span></div><div class="rail"><div class="knob" style="left:${pct}%"></div></div></div>`,
+  likert: (scale,sel=-1) => `<div class="likert">${scale.map((s,i)=>`<div class="cell ${i===sel?'sel':''}">${s}</div>`).join("")}</div>`,
+  alloc: (rows,remain) => `<div class="alloc">${rows.map(r=>`<div class="arow"><span class="aname">${r.n}</span><span class="mini"><i style="width:${r.p}%"></i></span><span class="pts">${r.p}</span></div>`).join("")}<div class="remain">restam: ${remain}</div></div>`,
+  pool: arr => `<div class="pool">${arr.map(w=>`<span class="word ${w.y?'y':''}">${w.t}</span>`).join("")}</div>`,
+  slot: label => `<div class="slot"><div class="slbl">${label}</div></div>`,
+  textarea: ph => `<div class="textarea">${ph||"…"}</div>`,
+  flip: (face,label) => `<div class="flip"><div class="card-face">${face}</div><div class="t-body" style="text-align:center;color:var(--claro)">${label}</div></div>`,
+  bars: rows => rows.map(r=>`<div class="bar"><div class="row"><span>${r.n}</span><b>${r.v}</b></div><div class="track"><div class="fill" style="width:${r.v}%"></div></div></div>`).join(""),
+  btn: (t,{ghost=false,disabled=false,full=false}={}) => `<div class="btn ${ghost?'ghost':''} ${disabled?'disabled':''} ${full?'full':''}">${t}</div>`,
+};
+
+const SCREENS = [
+ {g:"Abertura"},
+ {num:"00", name:"Contador", fx:null, input:null, center:true,
+  notes:"Tela de entrada. Um contador sobe de <b>0 a 100</b> em ~10s sobre preto puro — ritual de entrada. Em reduced-motion: '100' estático com botão.",
+  bullets:["Auto-avança ~0,9s após chegar a 100","Tipografia mono, gigante, clara"],
+  build: () => `<div class="counter">42</div>`},
+
+ {num:"01", name:"Portal — HUMANWARE", fx:"TextScramble → proximity", input:null, rosa:true,
+  notes:"Fundo <b>rosa #FF00AA</b>. HUMANWARE aparece com scramble e reage ao cursor/toque. Botão 'descer ↓' convida a continuar.",
+  bullets:["Logo é o herói da tela","Botão de descer com bounce sutil"],
+  build: () => `<div class="logo-rosa"><div class="logo-big">HUMANWARE</div><div class="down">descer ↓</div></div>`},
+
+ {num:"02", name:"Manifesto / Boas-vindas", fx:"TextReveal (revela ao rolar)", input:null,
+  notes:"Manifesto que se revela palavra a palavra ao rolar. No fim, a imagem do <b>espelho</b> (revela no hover) embrulha o botão 'Atravessar'.",
+  bullets:["Imagem: /espelho_01.png","Botão 'Atravessar' (efeito fill rosa)"],
+  build: () => `
+    ${R.body("Isso aqui não é pesquisa de clima. Não tem nota, não tem ranking, não tem resposta certa pra te deixar bonito na foto. É um espelho. Você olha, e a gente devolve o que viu — sem passar a mão na cabeça, mas sem te julgar também. Só funciona se você vier inteiro. Se vier de máscara, o espelho reflete a máscara. Respira. Larga a pressa lá fora. Vamos?")}
+    ${R.btn("Atravessar",{full:true})}`},
+
+ {g:"Entrada"},
+ {num:"03", name:"Perfil — quem é você", fx:null, input:"texto + pronome",
+  notes:"Coleta nome, cargo e <b>pronome</b>. O pronome define o <b>vocativo</b> do Bobo no resto do fluxo: ele→“Irmão”, ela→“Amiga”, outro/prefiro-não-dizer→neutro.",
+  bullets:["'Seguir' travado até ter nome + pronome"],
+  build: () => `
+    ${R.title("Antes de entrar, deixa eu saber com quem tô falando.")}
+    ${R.body("Nada de muito formal. Só pra eu não te tratar como número.")}
+    ${R.lbl("Como te chamam?")}${R.inputline("seu nome")}
+    ${R.lbl("O que você faz nesse rolê?")}${R.inputline("cargo / função")}
+    ${R.lbl("Como quer ser tratado aqui?")}
+    ${R.chips([{t:"ele/dele",sel:true},{t:"ela/dela"},{t:"outro"},{t:"prefiro não dizer"}])}
+    ${R.btn("Seguir")}`},
+
+ {num:"04", name:"Acordo (LGPD)", fx:null, input:"checkbox obrigatório",
+  notes:"Consentimento em tom GZero. Checkbox obrigatório + link pra política de privacidade.",
+  bullets:["'Selar o acordo' travado até marcar o checkbox"],
+  build: () => `
+    ${R.title("O combinado não sai caro.")}
+    ${R.body("Suas respostas são suas. A gente usa pra montar a fotografia da sua organização e melhorar o oráculo. Não vende, não entrega pra ninguém. Tudo conforme a LGPD. Detalhes na <span style='color:var(--rosa)'>política de privacidade</span>.")}
+    <div class="opt sel"><span class="k">✕</span><span>Topo. Pode usar minhas respostas como combinado.</span></div>
+    ${R.btn("Selar o acordo")}`},
+
+ {g:"Bloco 1 — Cenas do dia a dia"},
+ {num:"T1", name:"Transição — Bobo", fx:"Perspective + Highlight", input:null,
+  notes:"Primeira transição. Texto do Bobo em perspectiva 3D, com palavras destacadas em <b>amarelo</b>.",
+  bullets:["Botão: 'Manda a primeira'"],
+  build: () => `
+    ${R.jester("Primeira parada: umas cenas do dia a dia. Não me responde como DEVERIA ser. Me responde como É — naqueles dias em que ninguém tá olhando e a máscara cai. Bora. São rapidinhas.",["como É","máscara cai"])}
+    ${R.btn("Manda a primeira")}`},
+
+ {num:"05", name:"Bloco: Cenários (×13)", fx:null, input:"escolha única (a/b/c/d)", prog:8,
+  notes:"13 cenas, cada uma com 4 opções (a→d). Coração do diagnóstico de <b>prática</b>. O Bobo solta pop-ups se a pessoa responde rápido demais ou sempre na mesma letra.",
+  bullets:["Uma escolha por cena","'Seguir' travado até responder todas","Pop-ups do Bobo: rápido / mesma-letra / parado"],
+  build: () => `
+    ${R.prog(8)}
+    ${R.kicker("Cenas do dia a dia · 1/13")}
+    ${R.title("Aparece alguém com uma ideia fora da caixa. O que rola, de verdade?")}
+    ${R.opts([
+      {t:'Vira ideia pra "depois" — ninguém recusa, mas não vai.'},
+      {t:"Passa por reunião de validação até virar (ou não) projeto.",sel:true},
+      {t:"A pessoa é incentivada a tocar, com tempo protegido."},
+      {t:"Depende de quem é a pessoa e do humor da semana."}])}
+    ${R.btn("Seguir")}`},
+
+ {num:"06", name:"Carta: o cômodo", fx:"flip 3D", input:"texto aberto",
+  notes:"Primeira das 4 cartas. Vira em 3D ao clicar; no verso, pergunta + campo de texto livre. Quebra o ritmo das perguntas fechadas.",
+  bullets:["Frente: 🃏 'virar a carta'","'Seguir' travado até virar"],
+  build: () => `
+    ${R.kicker("carta 1 de 4")}
+    ${R.flip("🃏","Se sua organização fosse um cômodo de uma casa — qual seria? E por quê?")}
+    ${R.btn("Seguir")}`},
+
+ {g:"Bloco 2 — Tensões (sliders)"},
+ {num:"T2", name:"Transição — Bobo", fx:"Trembling lines (canvas)", input:null,
+  notes:"Linhas que tremem (canvas rAF) ao fundo enquanto o Bobo fala.",
+  bullets:["Botão: 'Bora calibrar'"],
+  build: () => `
+    ${R.jester("Agora um respiro diferente. Vou te dar uns pares de coisas que puxam pra lados opostos. Os dois importam. Quando aperta e não dá pra ter os dois, pra que lado a sua organização pende? Arrasta a bolinha pro ponto que é a verdade. Não pro ponto bonito.")}
+    ${R.btn("Bora calibrar")}`},
+
+ {num:"07", name:"Bloco: Sliders bipolares (×8)", fx:null, input:"slider 0–100 (arrastar)", prog:20,
+  notes:"8 pares de polos (humano ↔ máquina). Slider começa neutro (50) e só conta como respondido após interação.",
+  bullets:["Hint: 'arrasta pra responder'","'Seguir' travado até mexer em todos"],
+  build: () => `
+    ${R.prog(20)}
+    ${R.kicker("Tensões · arrasta cada bolinha")}
+    ${R.slider("Presença","Produtividade",38)}
+    ${R.slider("Afeto","Eficiência",60)}
+    ${R.slider("Intuição","Dados",50)}
+    ${R.slider("Ritual","Processo",72)}
+    ${R.slider("Vínculo","Métrica",45)}
+    ${R.btn("Seguir")}`},
+
+ {g:"Bloco 3 — Prioridades"},
+ {num:"T3", name:"Transição — Bobo", fx:"Nokia webcam (dithering)", input:null,
+  notes:"Webcam ao vivo com look retrô bitmap (dithering Floyd-Steinberg, 2 cores da paleta). Se negar câmera: campo estático. Pede permissão de câmera.",
+  bullets:["Botão: 'Encarar'","⚠ pede acesso à câmera (tem fallback)"],
+  build: () => `
+    ${R.jester("Essa parte é cruel — do jeito bom. Todo mundo diz que tudo importa igual. Mentira. Quando o cobertor é curto, alguma coisa fica de fora. Então não me diz o que importa. Me mostra onde o dinheiro, o tempo e a atenção REALMENTE vão.")}
+    ${R.btn("Encarar")}`},
+
+ {num:"08", name:"Bloco: Distribuir 100 pontos", fx:null, input:"alocação (soma=100)", prog:32,
+  notes:"6 categorias; distribui 100 pontos. Sliders limitados pelo saldo restante. Força trade-off real.",
+  bullets:["'Seguir' só libera quando soma = 100"],
+  build: () => `
+    ${R.prog(32)}
+    ${R.kicker("Onde vão dinheiro, tempo e atenção?")}
+    ${R.alloc([
+      {n:"Eficiência e processos",p:25},
+      {n:"Resultado e mercado",p:30},
+      {n:"Cuidado com gente",p:15},
+      {n:"Autoria e inovação",p:10},
+      {n:"Diversidade de verdade",p:10},
+      {n:"Impacto no mundo",p:5}],"5")}
+    ${R.btn("Seguir")}`},
+
+ {g:"Bloco 4 — O que aconteceu (90 dias)"},
+ {num:"T4", name:"Transição — Bobo", fx:"Glitch", input:null,
+  notes:"Texto com efeito glitch. Vira a chave de 'opinião' pra 'fato'.",
+  bullets:["Botão: 'Puxar da memória' (efeito glitch)"],
+  build: () => `
+    ${R.jester("Mudei o jogo. Agora não quero o que você acha — quero o que aconteceu. Pensa nos últimos 90 dias. Coisa concreta. Memória não mente tão fácil quanto opinião. Não precisa cravar número exato. Chuta com honestidade.")}
+    ${R.btn("Puxar da memória")}`},
+
+ {num:"09", name:"Bloco: Comportamentos (×11)", fx:null, input:"escala de frequência (5 pts)", prog:44,
+  notes:"11 afirmações sobre fatos dos últimos 90 dias. Escala: Nunca · 1 vez · Algumas · Muitas · É comum. Alguns itens são invertidos no cálculo (não exibido).",
+  bullets:["'Seguir' travado até responder todas"],
+  build: () => `
+    ${R.prog(44)}
+    ${R.kicker("Últimos 90 dias · 1/11")}
+    ${R.title("Alguém discordou de uma decisão da chefia na frente de todos — e foi escutado, sem sobrar pra ele depois.")}
+    ${R.likert(["Nunca","1 vez","Algumas","Muitas","É comum"],2)}
+    ${R.btn("Seguir")}`},
+
+ {g:"Bloco 5 — Polos (termômetros)"},
+ {num:"T5", name:"Transição — Bobo", fx:"Gooey drag (metaball SVG)", input:null,
+  notes:"Elementos 'gosmentos' que se fundem ao arrastar (filtro SVG metaball).",
+  bullets:["Botão: 'Sentir'"],
+  build: () => `
+    ${R.jester("Agora a parte que eu mais curto. Esquece certo e errado. Vou te mostrar dois jeitos de ser, dois polos — e os dois são humanos, os dois têm beleza. Me diz só onde a sua organização vive, de verdade, entre um e outro. Sente antes de responder.")}
+    ${R.btn("Sentir")}`},
+
+ {num:"10", name:"Bloco: Termômetros (×5)", fx:null, input:"slider com pergunta", prog:56,
+  notes:"5 perguntas, cada uma com 2 polos. Igual ao slider, mas com enunciado em cima.",
+  bullets:["'Seguir' travado até mexer em todos"],
+  build: () => `
+    ${R.prog(56)}
+    ${R.kicker("Polos · 1/5")}
+    ${R.title("Como vocês chegam nas decisões que importam?")}
+    ${R.slider("Sentindo uma direção","Projetando os dados",40)}
+    <div style="height:4px"></div>
+    ${R.title("Como o trabalho se organiza, no fundo?")}
+    ${R.slider("No caos potente","Na ordem clara",65)}
+    ${R.btn("Seguir")}`},
+
+ {num:"11", name:"Carta: fora / dentro", fx:"flip 3D", input:"texto aberto",
+  notes:"Segunda carta. Mesma mecânica de flip.",
+  bullets:["'Seguir' travado até virar"],
+  build: () => `
+    ${R.kicker("carta 2 de 4")}
+    ${R.flip("🃏","O que sua organização cria responde a uma pergunta que veio de fora — ou que nasceu de dentro?")}
+    ${R.btn("Seguir")}`},
+
+ {g:"Bloco 6 — Palavras"},
+ {num:"T6", name:"Transição — Bobo", fx:"Proximity (texto reage ao cursor)", input:null,
+  notes:"Texto reage à proximidade do cursor/toque.",
+  bullets:["Botão: 'Espalhar as palavras'"],
+  build: () => `
+    ${R.jester("Joguinho de palavras agora. Mais sério do que parece. Vou te dar um monte de palavra. Você joga cada uma no lugar onde ela vive de verdade aí dentro. Repara: tem diferença entre o que MOVE a parada e o que a gente só FALA que move. É aí que mora o babado.")}
+    ${R.btn("Espalhar as palavras")}`},
+
+ {num:"12", name:"Bloco: Arrastar palavras (×12)", fx:null, input:"arrastar p/ 3 zonas", prog:68,
+  notes:"12 palavras a classificar em 3 zonas: o que move / o que a gente fala que move / o que não tem vez. No mobile é tap-to-assign.",
+  bullets:["'Seguir' travado até alocar as 12"],
+  build: () => `
+    ${R.prog(68)}
+    ${R.kicker("Palavras · 12 pra distribuir")}
+    ${R.pool([{t:"Cuidado"},{t:"Presença"},{t:"Brincadeira"},{t:"Intuição"},{t:"Autoria"},{t:"Vínculo"},{t:"Eficiência"},{t:"Escala"},{t:"Controle"},{t:"Performance"},{t:"Competição"},{t:"Medo"}])}
+    ${R.slot("O que move de verdade")}
+    ${R.slot("O que a gente fala que move")}
+    ${R.slot("O que não tem vez aqui")}
+    ${R.btn("Seguir")}`},
+
+ {g:"Bloco 7 — A engrenagem (estrutural)"},
+ {num:"T7", name:"Transição — Bobo", fx:"Perspective", input:null,
+  notes:"Reusa o efeito de perspectiva. Tom mais 'osso', direto.",
+  bullets:["Botão: 'Ver por baixo'"],
+  build: () => `
+    ${R.jester("Chega de poesia por um instante. Agora é osso. Cultura bonita todo mundo tem no site. Eu quero saber da engrenagem por baixo: quem é dono, quem decide, quem leva a grana. Porque é aí — e não no manifesto — que se vê quem a organização realmente é.")}
+    ${R.btn("Ver por baixo")}`},
+
+ {num:"13", name:"Bloco: Estrutural (×11)", fx:null, input:"escala de grau (5 pts)", prog:80,
+  notes:"11 afirmações sobre estrutura/poder/propriedade. Escala: Nada · Pouco · Em parte · Bastante · Total. Cada item tem título curto + subtexto.",
+  bullets:["'Seguir' travado até responder todas"],
+  build: () => `
+    ${R.prog(80)}
+    ${R.kicker("A engrenagem · 1/11")}
+    ${R.title("A empresa é de quem faz ela")}
+    ${R.body("Pertence a quem trabalha — ou tem um dono lá longe, separado de quem bota a mão na massa?")}
+    ${R.likert(["Nada","Pouco","Em parte","Bastante","Total"],3)}
+    ${R.btn("Seguir")}`},
+
+ {num:"14", name:"Carta: a cena", fx:"flip 3D", input:"texto aberto",
+  notes:"Terceira carta. Pede uma cena real que descreve a organização.",
+  bullets:["'Seguir' travado até virar"],
+  build: () => `
+    ${R.kicker("carta 3 de 4")}
+    ${R.flip("🃏","Conta uma cena recente — algo que ACONTECEU — que descreve sua organização melhor que qualquer manifesto.")}
+    ${R.btn("Seguir")}`},
+
+ {num:"15", name:"Carta: nome secreto", fx:"flip 3D", input:"texto aberto",
+  notes:"Quarta e última carta. Tem uma fala introdutória do Bobo (com vocativo) antes da pergunta. Fecha a parte das perguntas.",
+  bullets:["Intro do Bobo com {voc}","'Seguir' travado até virar"],
+  build: () => `
+    ${R.kicker("carta 4 de 4")}
+    ${R.jester("Última. Essa é entre a gente, [Irmão/Amiga]. Toda organização tem um nome público. Mas e se ela tivesse um nome secreto — daqueles que ninguém pronuncia em reunião mas todo mundo sabe que é o verdadeiro?")}
+    ${R.flip("🃏","Qual seria o nome secreto da sua organização?")}
+    ${R.btn("Seguir")}`},
+
+ {g:"Final"},
+ {num:"16", name:"Fotografia final (arquétipo)", fx:null, input:null,
+  notes:"Tela de resultado. Fala de fechamento do Bobo + card do arquétipo + barras das dimensões. <b>HOJE é MOCK</b>: o cálculo real (módulo lib/scoring, 13 dimensões) será plugado depois. As respostas são logadas no console ao chegar aqui.",
+  bullets:["Card do arquétipo em destaque (borda rosa)","Barras animadas por dimensão","Nota visível: 'fotografia mock'","Futuro: compartilhar, salvar, etc."],
+  build: () => `
+    ${R.jester("Acabou. Respira, [Irmão/Amiga]. Você olhou no espelho sem desviar — isso já é mais do que muita gente aguenta. Olha o que eu vi:")}
+    <div class="arqcard">
+      ${R.kicker("arquétipo")}
+      <div class="nm">O Jardim Selvagem</div>
+      ${R.body("Cultiva mais do que controla. Cresce em direções que ninguém previu — e essa é a graça.")}
+    </div>
+    ${R.bars([
+      {n:"Presença",v:78},{n:"Autoria",v:64},{n:"Cuidado",v:71},
+      {n:"Abertura ao erro",v:52},{n:"Diversidade real",v:60},{n:"Sentido compartilhado",v:83}])}
+    <div class="warn">⚠ fotografia mock</div>`},
+];
+
+// ---------------- render ----------------
+const root = document.getElementById('root');
+const slug = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
+
+function deviceHTML(s, mode){
+  const vpcls = ['vp', mode, s.center?'center':'', s.rosa?'rosa':''].join(' ').trim();
+  const content = s.rosa || s.center ? s.build() : s.build();
+  if(mode==='m'){
+    return `<div class="device m" data-export data-name="${s.num}_${slug(s.name)}_mobile">
+      <div class="osbar-m"><div class="notch"></div></div>
+      <div class="${vpcls}">${content}</div></div>`;
+  }
+  return `<div class="device d" data-export data-name="${s.num}_${slug(s.name)}_desktop">
+    <div class="osbar-d"><span class="dot"></span><span class="dot"></span><span class="dot"></span>
+      <span class="url">humanware.app</span></div>
+    <div class="${vpcls}">${content}</div></div>`;
+}
+
+let n=0;
+SCREENS.forEach(s=>{
+  if(s.g){ root.insertAdjacentHTML('beforeend',`<div class="group-title">${s.g}</div><div class="group-rule"></div>`); return; }
+  n++;
+  const tags=[];
+  if(s.fx) tags.push(`<span class="badge fx">EFEITO · ${s.fx}</span>`);
+  if(s.input) tags.push(`<span class="badge input">INPUT · ${s.input}</span>`);
+  const bullets=(s.bullets||[]).map(b=>`<li>${b}</li>`).join("");
+
+  const el=document.createElement('div'); el.className='screen';
+  el.innerHTML=`
+    <div class="meta">
+      <div class="num">PASSO ${s.num}</div>
+      <h3>${s.name}</h3>
+      <div class="tags">${tags.join("")}</div>
+      <div class="notes">${s.notes||""}</div>
+      ${bullets?`<ul>${bullets}</ul>`:""}
+    </div>
+    <div class="frames">
+      <div class="framewrap">
+        <div class="framecap">Mobile</div>
+        ${deviceHTML(s,'m')}
+        <button class="exp">⬇ PNG mobile</button>
+      </div>
+      <div class="framewrap">
+        <div class="framecap">Desktop</div>
+        ${deviceHTML(s,'d')}
+        <button class="exp">⬇ PNG desktop</button>
+      </div>
+    </div>`;
+  root.appendChild(el);
+  el.querySelectorAll('.framewrap').forEach(fw=>{
+    const dev=fw.querySelector('[data-export]');
+    fw.querySelector('.exp').addEventListener('click',()=>exportPNG(dev,`humanware_${dev.dataset.name}.png`));
+  });
+});
+
+// ---------------- PNG export (html2canvas, offline, sem taint) ----------------
+function downloadBlob(b, filename){
+  const a=document.createElement('a');
+  const u=URL.createObjectURL(b);
+  a.href=u; a.download=filename; document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),1500);
+}
+
+async function exportPNG(node, filename){
+  if(typeof html2canvas!=='function'){
+    alert('Biblioteca de exportação não carregou. Confirme que a pasta "vendor" está junto deste arquivo.');
+    return;
+  }
+  try{
+    const canvas = await html2canvas(node,{scale:2, backgroundColor:null, logging:false, useCORS:true});
+    await new Promise(res=>canvas.toBlob(b=>{ if(b) downloadBlob(b,filename); res(); },'image/png'));
+  }catch(e){
+    alert('Não consegui gerar o PNG: '+e);
+  }
+}
+
+async function exportAll(mode){
+  const nodes=[...document.querySelectorAll(`.device.${mode}[data-export]`)];
+  for(const node of nodes){
+    await exportPNG(node,`humanware_${node.dataset.name}.png`);
+    await new Promise(r=>setTimeout(r,250)); // espaça pra não ser bloqueado
+  }
+}
+</script>
+</body>
+</html>

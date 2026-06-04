@@ -29,7 +29,7 @@ export function OpeningCounter() {
       {reduced ? (
         <button
           onClick={next}
-          className="font-mono text-7xl font-bold tabular-nums text-claro hover:text-rosa"
+          className="font-mono text-5xl font-bold tabular-nums text-claro hover:text-rosa"
           aria-label="entrar"
         >
           100
@@ -38,8 +38,8 @@ export function OpeningCounter() {
         <Counter
           start={0}
           end={100}
-          duration={10}
-          fontSize={140}
+          duration={5}
+          fontSize={84}
           className="text-claro"
           onComplete={finish}
         />

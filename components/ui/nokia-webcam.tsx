@@ -124,9 +124,12 @@ export function NokiaWebcam({
       const od = out.data;
       const c = bgRef.current;
       const bgRGB = c === "#FF00AA" ? [255, 0, 170] : [255, 255, 0];
+      const half = cols / 2; // eixo do espelho, no centro
       for (let y = 0; y < rows; y++) {
         for (let x = 0; x < cols; x++) {
-          const on = gray[y * cols + x] >= 128; // light pixel
+          // mirror central: a metade direita reflete a esquerda
+          const sxm = x < half ? x : cols - 1 - x;
+          const on = gray[y * cols + sxm] >= 128; // light pixel
           const rgb = on ? LIGHT : bgRGB;
           const px0 = x * BLOCK;
           const py0 = y * BLOCK;
@@ -179,29 +182,40 @@ export function NokiaWebcam({
         <canvas ref={canvasRef} className="absolute inset-0 h-full w-full" />
       )}
 
-      {/* HUD */}
-      <div className="pointer-events-none absolute inset-0 z-10 font-mono text-claro">
-        <span className="absolute left-3 top-3 text-xs tracking-widest">
-          ▮▮▮ HUMANWARE CAM
-        </span>
-        <div className="pointer-events-auto absolute right-3 top-3 flex gap-2">
-          {(["#FF00AA", "#FFFF00"] as NokiaColor[]).map((c) => (
-            <button
-              key={c}
-              aria-label={`cor ${c}`}
-              onClick={() => setBg(c)}
-              className={cn(
-                "h-4 w-4 rounded-full border",
-                bg === c ? "border-claro" : "border-claro/40"
-              )}
-              style={{ background: c }}
-            />
-          ))}
-        </div>
+      {/* eixo central do espelho */}
+      {!denied && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-1/2 z-10 w-px -translate-x-1/2 bg-claro/15"
+        />
+      )}
+
+      {/* HUD topo-esquerda */}
+      <div className="pointer-events-none absolute left-3 top-3 z-10 font-mono text-xs tracking-widest text-claro">
+        ▮▮▮ HUMANWARE CAM · espelho
       </div>
 
+      {/* conteúdo (texto + botão) */}
       <div className="relative z-20 flex h-full w-full items-center justify-center">
         {children}
+      </div>
+
+      {/* botões de cor — canto inferior direito, quadrados e maiores */}
+      <div className="absolute bottom-4 right-4 z-30 flex gap-2">
+        {(["#FF00AA", "#FFFF00"] as NokiaColor[]).map((c) => (
+          <button
+            key={c}
+            type="button"
+            aria-label={`cor ${c}`}
+            aria-pressed={bg === c}
+            onClick={() => setBg(c)}
+            className={cn(
+              "h-10 w-10 border-2 transition-transform hover:scale-105",
+              bg === c ? "border-claro" : "border-claro/40"
+            )}
+            style={{ background: c }}
+          />
+        ))}
       </div>
     </div>
   );

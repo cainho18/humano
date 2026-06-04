@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import { useFlow } from "@/lib/state/AnswersContext";
 import { ProgressBar } from "@/components/flow/ProgressBar";
 import { JesterOverlay } from "@/components/flow/JesterOverlay";
+import { RetroMap } from "@/components/flow/RetroMap";
 
 import { OpeningCounter } from "@/components/screens/opening/OpeningCounter";
 import { OpeningPortal } from "@/components/screens/opening/OpeningPortal";
@@ -70,6 +71,7 @@ export function FlowController() {
       <AnimatePresence mode="wait">
         {cloneElement(screen, { key: stepIndex })}
       </AnimatePresence>
+      <RetroMap />
       <JesterOverlay />
     </div>
   );

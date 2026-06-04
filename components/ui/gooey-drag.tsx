@@ -4,23 +4,38 @@ import { motion } from "framer-motion";
 import { useId } from "react";
 import { cn } from "@/lib/cn";
 
-interface GooeyDragProps {
-  className?: string;
-  /** colors for the metaballs (palette only) */
-  blobs?: { color: string; size: number; x: string; y: string }[];
+interface Blob {
+  size: number;
+  x: string;
+  y: string;
 }
 
-const DEFAULT_BLOBS = [
-  { color: "#ff00aa", size: 90, x: "20%", y: "30%" },
-  { color: "#ffff00", size: 70, x: "55%", y: "55%" },
-  { color: "#ff00aa", size: 60, x: "70%", y: "25%" },
-  { color: "#ffff00", size: 50, x: "38%", y: "65%" },
+interface GooeyDragProps {
+  className?: string;
+  /** cor das bolas (paleta) */
+  color?: string;
+  blobs?: Blob[];
+}
+
+/** Bolas dispostas ao redor das bordas (deixam o centro livre pro texto). */
+const DEFAULT_BLOBS: Blob[] = [
+  { size: 96, x: "7%", y: "14%" },
+  { size: 70, x: "82%", y: "10%" },
+  { size: 60, x: "46%", y: "5%" },
+  { size: 84, x: "5%", y: "66%" },
+  { size: 76, x: "85%", y: "68%" },
+  { size: 58, x: "44%", y: "85%" },
 ];
 
 /**
- * Draggable gooey blobs (metaball merge via SVG filter). Palette only.
+ * Bolas arrastáveis que se fundem (metaball via filtro SVG). Todas draggable;
+ * ficam ao redor do conteúdo central.
  */
-export function GooeyDrag({ className, blobs = DEFAULT_BLOBS }: GooeyDragProps) {
+export function GooeyDrag({
+  className,
+  color = "#f2f2f2",
+  blobs = DEFAULT_BLOBS,
+}: GooeyDragProps) {
   const id = useId().replace(/:/g, "");
   const filterId = `goo-${id}`;
 
@@ -45,23 +60,21 @@ export function GooeyDrag({ className, blobs = DEFAULT_BLOBS }: GooeyDragProps) 
         </defs>
       </svg>
 
-      <div
-        className="absolute inset-0"
-        style={{ filter: `url(#${filterId})` }}
-      >
+      <div className="absolute inset-0" style={{ filter: `url(#${filterId})` }}>
         {blobs.map((b, i) => (
           <motion.div
             key={i}
             drag
             dragMomentum={false}
             whileDrag={{ scale: 1.15 }}
-            className="absolute cursor-grab rounded-full active:cursor-grabbing"
+            whileHover={{ scale: 1.06 }}
+            className="absolute cursor-grab touch-none rounded-full active:cursor-grabbing"
             style={{
               left: b.x,
               top: b.y,
               width: b.size,
               height: b.size,
-              background: b.color,
+              background: color,
             }}
           />
         ))}

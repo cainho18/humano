@@ -29,6 +29,14 @@ const HEADERS: Record<BlockId, string> = {
   structural: "A engrenagem por baixo",
 };
 
+/** Lembrete curto de como responder — fica visível durante o bloco. */
+const SUBHEADS: Partial<Record<BlockId, string>> = {
+  sliders:
+    "Os dois lados importam — não tem certo nem errado. Arrasta a bolinha pro ponto que é a verdade da sua organização, não pro ponto bonito.",
+  thermometers:
+    "Não é sobre o ideal. É sobre onde a sua organização realmente vive, hoje, entre um polo e outro.",
+};
+
 /** Dispatcher dos 7 blocos macro. Botão de avanço só libera quando completo. */
 export function BlockScreen({ block }: { block: BlockId }) {
   const flow = useFlow();
@@ -185,9 +193,16 @@ export function BlockScreen({ block }: { block: BlockId }) {
   return (
     <ScreenShell bg="preto" scroll center={false}>
       <div className="mx-auto flex w-full max-w-2xl flex-col gap-12 py-8">
-        <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-rosa">
-          {HEADERS[block]}
-        </h2>
+        <div className="flex flex-col gap-3">
+          <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-rosa">
+            {HEADERS[block]}
+          </h2>
+          {SUBHEADS[block] && (
+            <p className="max-w-xl font-mono text-xs leading-relaxed text-claro/55">
+              {SUBHEADS[block]}
+            </p>
+          )}
+        </div>
         {body}
         <div className="sticky bottom-6 flex justify-end pt-4">
           <RitualButton

@@ -6,12 +6,15 @@ import { useFlow } from "@/lib/state/AnswersContext";
 import { TRANSITIONS } from "@/lib/content/jester";
 import type { TransitionEffect } from "@/lib/flow/steps";
 import { RitualButton } from "@/components/ui/button-fx";
+import { cn } from "@/lib/cn";
 
 import { Perspective, Highlight } from "@/components/ui/perspective-highlight";
 import { TremblingLines } from "@/components/ui/trembling-lines";
 import { NokiaWebcam } from "@/components/ui/nokia-webcam";
 import { GlitchText } from "@/components/ui/glitch";
 import { GooeyDrag } from "@/components/ui/gooey-drag";
+import { GlassCard } from "@/components/ui/glass-card";
+import { FlashlightText } from "@/components/ui/flashlight-text";
 import TextCursorProximity from "@/components/ui/text-cursor-proximity";
 
 interface TransitionScreenProps {
@@ -19,7 +22,6 @@ interface TransitionScreenProps {
   effect: TransitionEffect;
 }
 
-/** Quebra a fala em pedaços, destacando os trechos pedidos no briefing. */
 function withHighlights(fala: string, highlights: string[]): ReactNode {
   if (highlights.length === 0) return fala;
   const escaped = highlights.map((h) => h.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"));
@@ -36,7 +38,6 @@ function withHighlights(fala: string, highlights: string[]): ReactNode {
   );
 }
 
-/** Telas de transição do Bobo — uma fala, um efeito distinto, um botão. */
 export function TransitionScreen({
   transitionId,
   effect,
@@ -46,12 +47,17 @@ export function TransitionScreen({
   const def = TRANSITIONS[transitionId];
   const fala = voc(def.fala);
 
+  const accent: "rosa" | "amarelo" =
+    effect === "gooey" || effect === "trembling" || effect === "glitch"
+      ? "amarelo"
+      : "rosa";
+
   const advance = (
     <div className="relative z-30 mt-12 flex justify-center">
       <RitualButton
         label={def.button}
         fx={effect === "glitch" ? "glitch" : "scramble"}
-        accent={effect === "trembling" || effect === "glitch" ? "amarelo" : "rosa"}
+        accent={accent}
         onClick={next}
       />
     </div>
@@ -62,6 +68,8 @@ export function TransitionScreen({
       🃏
     </span>
   );
+
+  const pageBg = effect === "gooey" ? "bg-rosa" : "bg-preto";
 
   let inner: ReactNode;
 
@@ -81,11 +89,16 @@ export function TransitionScreen({
     case "trembling":
       inner = (
         <>
-          <TremblingLines color="#ff00aa" lines={16} />
-          <div className="relative z-30 mx-auto max-w-2xl text-center">
-            {jester}
-            <p className="font-display text-2xl leading-relaxed text-claro md:text-3xl">
-              {fala}
+          <TremblingLines color="#ff00aa" lines={12} />
+          <div className="relative z-30 mx-auto max-w-2xl">
+            <GlassCard className="text-center">
+              {jester}
+              <p className="font-display text-2xl leading-relaxed text-claro md:text-3xl">
+                {fala}
+              </p>
+            </GlassCard>
+            <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-widest text-claro/50">
+              passe o cursor nas cordas — cada uma tem um som
             </p>
             {advance}
           </div>
@@ -97,12 +110,14 @@ export function TransitionScreen({
       inner = (
         <div className="absolute inset-0">
           <NokiaWebcam>
-            <div className="mx-auto max-w-2xl px-6 text-center">
-              {jester}
-              <p className="font-display text-xl leading-relaxed text-claro drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] md:text-2xl">
-                {fala}
-              </p>
-              {advance}
+            <div className="mx-auto max-w-xl px-6">
+              <GlassCard className="text-center">
+                {jester}
+                <p className="font-display text-xl leading-relaxed text-claro md:text-2xl">
+                  {fala}
+                </p>
+                <div className="mt-8">{advance}</div>
+              </GlassCard>
             </div>
           </NokiaWebcam>
         </div>
@@ -127,39 +142,49 @@ export function TransitionScreen({
     case "gooey":
       inner = (
         <>
-          <div className="absolute inset-0 opacity-70">
-            <GooeyDrag />
+          <div className="absolute inset-0">
+            <GooeyDrag color="#f2f2f2" />
           </div>
-          <div className="relative z-30 mx-auto max-w-2xl text-center">
-            {jester}
-            <p className="font-display text-2xl leading-relaxed text-claro md:text-3xl">
-              {fala}
-            </p>
-            {advance}
+          <div className="pointer-events-none relative z-30 mx-auto max-w-lg">
+            <GlassCard className="pointer-events-auto text-center">
+              {jester}
+              <p className="font-display text-2xl leading-relaxed text-claro md:text-3xl">
+                {fala}
+              </p>
+              <div className="mt-8">{advance}</div>
+            </GlassCard>
           </div>
         </>
       );
       break;
 
     case "proximity":
+      // desktop = lanterna; mobile = texto reagindo ao toque (proximity)
       inner = (
-        <div
-          ref={containerRef}
-          className="relative z-30 mx-auto max-w-2xl text-center"
-        >
-          {jester}
-          <p className="font-display text-2xl leading-relaxed text-claro md:text-3xl">
-            <TextCursorProximity
-              label={fala}
-              containerRef={containerRef}
-              radius={110}
-              falloff="gaussian"
-              styles={{
-                color: { from: "#f2f2f2", to: "#ff00aa" },
-                fontWeight: { from: 400, to: 800 },
-              }}
-            />
-          </p>
+        <div className="relative z-30 mx-auto w-full max-w-3xl">
+          {/* desktop: lanterna */}
+          <div className="hidden sm:block">
+            <FlashlightText text={fala} />
+            <p className="mt-4 text-center font-mono text-[10px] uppercase tracking-widest text-claro/40">
+              use o cursor como lanterna pra revelar
+            </p>
+          </div>
+          {/* mobile: proximidade ao toque */}
+          <div ref={containerRef} className="text-center sm:hidden">
+            {jester}
+            <p className="font-display text-2xl leading-relaxed text-claro">
+              <TextCursorProximity
+                label={fala}
+                containerRef={containerRef}
+                radius={110}
+                falloff="gaussian"
+                styles={{
+                  color: { from: "#f2f2f2", to: "#ff00aa" },
+                  fontWeight: { from: 400, to: 800 },
+                }}
+              />
+            </p>
+          </div>
           {advance}
         </div>
       );
@@ -172,7 +197,10 @@ export function TransitionScreen({
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6 }}
-      className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden bg-preto px-6 py-16"
+      className={cn(
+        "relative flex min-h-dvh w-full items-center justify-center overflow-hidden px-6 py-16",
+        pageBg
+      )}
     >
       {inner}
     </motion.div>

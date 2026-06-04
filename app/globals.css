@@ -28,6 +28,25 @@ body {
   overflow-x: hidden;
 }
 
+/* Cursor custom: esconde o ponteiro nativo só em dispositivos com mouse/trackpad.
+   A bolinha #F2F2F2 (CursorBall) assume o lugar. Touch mantém o normal. */
+@media (pointer: fine) {
+  html,
+  body {
+    cursor: none;
+  }
+  a,
+  button,
+  input,
+  textarea,
+  select,
+  label,
+  [role="button"],
+  [data-cursor] {
+    cursor: none;
+  }
+}
+
 /* Seleção na cor-assinatura */
 ::selection {
   background: var(--color-rosa);
@@ -126,7 +145,24 @@ body {
   transform: rotateY(180deg);
 }
 
-/* Slider bipolar / alocador de pontos */
+/* Slider bipolar / alocador de pontos
+   Alinhamento robusto: a trilha (runnable-track) tem altura explícita de 4px e
+   o thumb usa margin-top = (4 - 22)/2 = -9px para centralizar exatamente. */
+.hw-range {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent; /* a cor da trilha vem do background inline (gradiente) */
+}
+.hw-range::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: transparent;
+}
+.hw-range::-moz-range-track {
+  height: 4px;
+  border-radius: 9999px;
+  background: transparent;
+}
 .hw-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
@@ -136,7 +172,7 @@ body {
   background: var(--color-claro);
   border: 2px solid var(--color-rosa);
   cursor: pointer;
-  margin-top: -10px;
+  margin-top: -9px;
 }
 .hw-range::-moz-range-thumb {
   height: 22px;
