@@ -5,6 +5,7 @@
  */
 
 import { scoreSession } from "./index";
+import { humanwareView } from "./humanware";
 import { FIXTURES, FIXTURE_SESSIONS } from "./fixtures";
 
 let pass = 0;
@@ -30,4 +31,30 @@ for (const [key, session] of Object.entries(FIXTURE_SESSIONS)) {
 }
 
 console.log(`\n${pass}/${pass + fail} fixtures passed`);
-if (fail > 0) process.exit(1);
+
+// ── Visão Humanware (humanware.ts) ────────────────────────────────
+const TRILHAS = ["Existencial", "Cultural", "Digital"];
+const ROTAS = ["GZero", "GZero+Loomi", "GZero+acaso"];
+let hpass = 0;
+let hfail = 0;
+console.log("\n--- humanware.ts ---");
+for (const [key, session] of Object.entries(FIXTURE_SESSIONS)) {
+  const d = scoreSession(session);
+  const v = humanwareView(session, d);
+  const okShape =
+    v.tecnologias.length === 6 &&
+    v.versao >= 1 &&
+    v.versao <= 10 &&
+    v.gravidade === 10 - v.versao &&
+    TRILHAS.includes(v.prescricao.trilha) &&
+    ROTAS.includes(v.prescricao.roteamento) &&
+    !!v.prescricao.primeiro_salto;
+  if (okShape) hpass++;
+  else hfail++;
+  console.log(
+    `${okShape ? "PASS" : "FAIL"}  ${key.padEnd(12)} v${String(v.versao).padEnd(2)} grav=${v.gravidade} ${v.frequencia.padEnd(11)} → ${v.prescricao.intensidade} · ${v.prescricao.trilha} [${v.prescricao.roteamento}]${v.prescricao.trava ? " ⚠trava" : ""}`
+  );
+}
+console.log(`\n${hpass}/${hpass + hfail} humanware checks passed`);
+
+if (fail > 0 || hfail > 0) process.exit(1);

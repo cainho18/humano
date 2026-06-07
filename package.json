@@ -10,8 +10,10 @@
     "test:scoring": "rm -rf .scoreout && tsc -p tsconfig.score.json && node .scoreout/lib/scoring/verify.js"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "clsx": "^2.1.1",
     "framer-motion": "^12.40.0",
+    "gsap": "^3.15.0",
     "lucide-react": "^1.17.0",
     "motion": "^12.40.0",
     "next": "16.2.6",
