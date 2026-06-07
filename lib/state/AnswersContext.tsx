@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -20,6 +21,7 @@ import {
 import { STEPS, Step } from "@/lib/flow/steps";
 import { applyVocative } from "@/lib/vocative";
 import { JESTER_POPUPS, JesterPopup } from "@/lib/content/jester";
+import { DEMO_PROFILE, demoAnswers } from "@/lib/state/demo";
 
 interface AnswersCtx {
   perfil: Profile;
@@ -75,6 +77,19 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
   const lastPosition = useRef<string | null>(null);
   const samePositionStreak = useRef(0);
   const popupsShown = useRef(0);
+
+  // Atalho de demonstração: ?demo=final preenche uma sessão e pula pro fim.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (new URLSearchParams(window.location.search).get("demo") !== "final")
+      return;
+    /* eslint-disable react-hooks/set-state-in-effect */
+    setPerfilState(DEMO_PROFILE);
+    setRespostas(demoAnswers());
+    setStepIndex(STEPS.length - 1);
+    setMaxReached(STEPS.length - 1);
+    /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
 
   const setPerfil = useCallback((p: Partial<Profile>) => {
     setPerfilState((prev) => ({ ...prev, ...p }));
