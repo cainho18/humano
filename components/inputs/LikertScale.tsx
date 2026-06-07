@@ -22,20 +22,22 @@ export function LikertScale({ scale, value, onChange }: LikertScaleProps) {
             onClick={() => onChange(i as LikertIndex)}
             aria-pressed={active}
             className={cn(
-              "flex flex-col items-center gap-2 border-2 px-1 py-3 transition-colors cursor-pointer",
+              "group flex cursor-pointer flex-col items-center gap-2.5 px-1 py-3.5 transition-all duration-200 active:scale-[0.97]",
               active
-                ? "border-rosa bg-rosa text-preto"
-                : "border-claro/20 text-claro/60 hover:border-rosa hover:text-claro"
+                ? "bg-rosa text-preto shadow-[0_14px_34px_-18px_rgba(255,0,170,0.85)]"
+                : "border border-claro/15 text-claro/55 hover:border-claro/40 hover:text-claro"
             )}
           >
             <span
               className={cn(
-                "h-2 w-2 rounded-full",
-                active ? "bg-preto" : "bg-claro/40"
+                "h-2.5 w-2.5 rounded-full transition-colors",
+                active
+                  ? "bg-preto"
+                  : "bg-claro/30 group-hover:bg-claro/70"
               )}
               aria-hidden
             />
-            <span className="text-center font-mono text-[10px] uppercase leading-tight tracking-wide">
+            <span className="hw-kicker text-center leading-tight" style={{ letterSpacing: "0.14em" }}>
               {label}
             </span>
           </button>

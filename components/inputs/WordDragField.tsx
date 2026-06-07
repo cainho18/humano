@@ -71,12 +71,12 @@ export function WordDragField({ values, onAssign }: WordDragFieldProps) {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.8 }}
       className={cn(
-        "relative inline-flex cursor-grab touch-none select-none items-center border-2 px-3 py-1.5 font-mono text-sm active:cursor-grabbing",
+        "relative inline-flex cursor-grab touch-none select-none items-center border px-3.5 py-2 font-mono text-sm transition-colors active:cursor-grabbing",
         picked === id
-          ? "border-amarelo bg-amarelo text-preto"
+          ? "border-amarelo bg-amarelo text-preto shadow-[0_10px_28px_-14px_rgba(255,255,0,0.8)]"
           : placed
-            ? "border-claro/40 text-claro"
-            : "border-rosa text-rosa"
+            ? "border-claro/35 text-claro hover:border-claro/60"
+            : "border-rosa/70 text-rosa hover:border-rosa hover:bg-rosa/5"
       )}
     >
       {label}
@@ -103,13 +103,11 @@ export function WordDragField({ values, onAssign }: WordDragFieldProps) {
       {/* monte de palavras ainda sem lugar */}
       <div
         ref={poolRef}
-        className="flex min-h-16 flex-wrap items-start gap-3 border-2 border-dashed border-claro/20 p-3"
+        className="flex min-h-16 flex-wrap items-start gap-3 border border-dashed border-claro/25 p-4"
       >
         <AnimatePresence mode="popLayout">
           {pool.length === 0 ? (
-            <span className="font-mono text-xs text-claro/40">
-              todas espalhadas ✓
-            </span>
+            <span className="hw-kicker text-claro/40">todas espalhadas ✓</span>
           ) : (
             pool.map((w) => (
               <Chip key={w.id} id={w.id} label={w.label} placed={false} />
@@ -118,7 +116,7 @@ export function WordDragField({ values, onAssign }: WordDragFieldProps) {
         </AnimatePresence>
       </div>
 
-      <p className="font-mono text-[10px] uppercase tracking-widest text-amarelo/70">
+      <p className="hw-kicker text-amarelo/75">
         arrasta a palavra pro lugar — ou toca nela e depois no quadrante
       </p>
 
@@ -134,13 +132,13 @@ export function WordDragField({ values, onAssign }: WordDragFieldProps) {
               }}
               onClick={() => tapSlot(slot.id)}
               className={cn(
-                "flex min-h-32 flex-col gap-3 border-2 p-3 text-left transition-colors",
-                picked ? "border-amarelo" : "border-claro/20"
+                "flex min-h-32 flex-col gap-3 border p-4 text-left transition-colors",
+                picked
+                  ? "border-amarelo bg-amarelo/[0.04]"
+                  : "border-claro/15 hover:border-claro/30"
               )}
             >
-              <span className="font-mono text-[10px] uppercase tracking-widest text-claro/50">
-                {slot.label}
-              </span>
+              <span className="hw-kicker text-claro/45">{slot.label}</span>
               <div className="flex flex-wrap gap-3">
                 <AnimatePresence mode="popLayout">
                   {here.map((w) => (

@@ -5,6 +5,32 @@ formulário corporativo: é um diagnóstico vivo, narrado pelo **Bobo da Corte**
 em linguagem GZero (informal-poética). A pessoa atravessa o espelho, responde a
 cenas e perguntas, e recebe uma "fotografia" do arquétipo da sua organização.
 
+## Repaginação visual (v2)
+
+Revisão completa de UX/UI **mantendo a paleta de 4 cores**. O que mudou:
+
+- **Sistema de design** em `app/globals.css`: escala tipográfica fluida
+  (`clamp`), tokens de movimento (`--ease-ritual`), ritmo/espaço por `--gutter`,
+  e um **grão** sutil global (`<Grain/>`) que tira a planura do preto puro.
+- **Tipografia editorial**: cabeçalhos com kicker numerado + título display +
+  acento serifado itálico para as linhas poéticas. Primitivas `.hw-kicker`,
+  `.hw-title`, `.hw-lead`, `.hw-accent`, e o componente `<ScreenHeader/>`.
+- **Marca gzero** (`<GZeroMark/>`): o SVG entra como máscara recolorível
+  (`currentColor`), usada de forma mínima — assinatura fixa (`<Signature/>`),
+  selo da abertura, e no retrato final (herói + cartão-lembrança).
+- **Abertura repaginada**: a tela de carregamento é um **logo-reveal** da gzero
+  (50%→0% de transparência, esquerda→direita; expande e some). O **portal**
+  (`OpeningPortal`) funde HUMANWARE + manifesto numa só página: rolar (mouse ou
+  o botão "descer") dispara uma **PIXELATED SCROLL TRANSITION** (grade de blocos
+  que dissolve o rosa em preto, GSAP pin+scrub) e acende o manifesto palavra a
+  palavra. O espelho só aparece no **hover do botão** (`RevealImageOnHover`).
+- **Scroll-telling (GSAP ScrollTrigger)** também na tela final.
+- Telas repaginadas: loader, portal, perfil, acordo, blocos (capítulos
+  numerados 01–07), transições do Bobo, cartas e o retrato final.
+
+> Atalho de QA (apenas dev): `/?step=N` monta direto na etapa N com respostas
+> mock; `/?demo=final` abre o retrato. Em produção esses atalhos são inertes.
+
 ## Stack
 
 - **Next.js 16** (App Router, Turbopack) + **React 19** + **TypeScript** (strict)

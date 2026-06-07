@@ -33,11 +33,14 @@ export function ScenarioChoice({
 
   return (
     <fieldset className="flex flex-col gap-6">
-      <legend className="font-display text-2xl leading-snug md:text-3xl">
+      <legend
+        className="hw-title text-claro"
+        style={{ fontSize: "var(--text-h3)" }}
+      >
         {scenario.prompt}
       </legend>
-      <div className="flex flex-col gap-3">
-        {options.map((opt) => {
+      <div className="flex flex-col gap-2.5">
+        {options.map((opt, i) => {
           const active = value === opt.key;
           return (
             <motion.button
@@ -47,13 +50,24 @@ export function ScenarioChoice({
               aria-pressed={active}
               whileTap={{ scale: 0.99 }}
               className={cn(
-                "border-2 px-5 py-4 text-left font-mono text-sm leading-relaxed transition-colors cursor-pointer",
+                "group flex cursor-pointer items-start gap-4 px-5 py-4 text-left font-mono text-sm leading-relaxed transition-all duration-200",
                 active
-                  ? "border-rosa bg-rosa text-preto"
-                  : "border-claro/20 text-claro/80 hover:border-rosa hover:text-claro"
+                  ? "bg-rosa text-preto shadow-[0_16px_40px_-20px_rgba(255,0,170,0.8)]"
+                  : "border border-claro/15 text-claro/75 hover:border-claro/40 hover:bg-claro/[0.03] hover:text-claro"
               )}
             >
-              {opt.text}
+              <span
+                className={cn(
+                  "mt-px flex h-5 w-5 shrink-0 items-center justify-center text-[10px] font-bold tabular-nums transition-colors",
+                  active
+                    ? "bg-preto/15 text-preto"
+                    : "border border-claro/25 text-claro/45 group-hover:border-claro/50 group-hover:text-claro/80"
+                )}
+                aria-hidden
+              >
+                {["A", "B", "C", "D", "E", "F"][i]}
+              </span>
+              <span className="pt-px">{opt.text}</span>
             </motion.button>
           );
         })}

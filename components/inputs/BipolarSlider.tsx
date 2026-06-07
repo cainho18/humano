@@ -26,34 +26,44 @@ export function BipolarSlider({
   return (
     <div className="flex flex-col gap-4">
       {question && (
-        <p className="font-display text-xl leading-snug md:text-2xl">
+        <p
+          className="hw-title text-claro"
+          style={{ fontSize: "var(--text-h3)" }}
+        >
           {question}
         </p>
       )}
-      <div className="flex items-center justify-between font-mono text-xs uppercase tracking-widest text-claro/60">
-        <span>{left}</span>
-        <span>{right}</span>
+      <div className="flex items-center justify-between gap-4">
+        <span className="hw-kicker max-w-[42%] text-claro/65">{left}</span>
+        <span className="hw-kicker max-w-[42%] text-right text-claro/65">
+          {right}
+        </span>
       </div>
-      <input
-        type="range"
-        min={0}
-        max={100}
-        value={v}
-        onChange={(e) => onChange(Number(e.target.value))}
-        onPointerUp={onCommit}
-        onKeyUp={onCommit}
-        className={cn(
-          "hw-range h-1 w-full cursor-pointer appearance-none rounded-none bg-claro/20",
-          !touched && "opacity-60"
-        )}
-        style={{
-          background: `linear-gradient(to right, #ff00aa 0%, #ff00aa ${v}%, rgba(242,242,242,0.2) ${v}%, rgba(242,242,242,0.2) 100%)`,
-        }}
-      />
+      <div className="relative py-1.5">
+        {/* tique central de referência */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-1/2 top-0 h-1.5 w-px -translate-x-1/2 bg-claro/25"
+        />
+        <input
+          type="range"
+          min={0}
+          max={100}
+          value={v}
+          onChange={(e) => onChange(Number(e.target.value))}
+          onPointerUp={onCommit}
+          onKeyUp={onCommit}
+          className={cn(
+            "hw-range h-1 w-full cursor-pointer appearance-none rounded-none bg-claro/20",
+            !touched && "opacity-70"
+          )}
+          style={{
+            background: `linear-gradient(to right, #ff00aa 0%, #ff00aa ${v}%, rgba(242,242,242,0.2) ${v}%, rgba(242,242,242,0.2) 100%)`,
+          }}
+        />
+      </div>
       {!touched && (
-        <p className="font-mono text-[10px] uppercase tracking-widest text-amarelo/70">
-          arrasta pra responder
-        </p>
+        <p className="hw-kicker text-amarelo/75">arrasta pra responder</p>
       )}
     </div>
   );

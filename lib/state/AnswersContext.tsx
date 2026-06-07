@@ -61,6 +61,8 @@ const Ctx = createContext<AnswersCtx | null>(null);
 const MAX_POPUPS = 2;
 
 export function AnswersProvider({ children }: { children: React.ReactNode }) {
+  // Defaults SSR-safe (sem ler window no render → sem hydration mismatch).
+  // A semeadura por URL (?demo=final / ?step=N) acontece no efeito abaixo.
   const [perfil, setPerfilState] = useState<Profile>({
     nome: "",
     cargo: "",
@@ -79,16 +81,43 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
   const popupsShown = useRef(0);
 
   // Atalho de demonstração: ?demo=final preenche uma sessão e pula pro fim.
+  // QA (dev): ?step=N monta direto na etapa N já com respostas-mock.
   useEffect(() => {
     if (typeof window === "undefined") return;
-    if (new URLSearchParams(window.location.search).get("demo") !== "final")
-      return;
+    const params = new URLSearchParams(window.location.search);
     /* eslint-disable react-hooks/set-state-in-effect */
-    setPerfilState(DEMO_PROFILE);
-    setRespostas(demoAnswers());
-    setStepIndex(STEPS.length - 1);
-    setMaxReached(STEPS.length - 1);
+    if (params.get("demo") === "final") {
+      setPerfilState(DEMO_PROFILE);
+      setRespostas(demoAnswers());
+      setStepIndex(STEPS.length - 1);
+      setMaxReached(STEPS.length - 1);
+      return;
+    }
+    const stepParam = params.get("step");
+    if (process.env.NODE_ENV !== "production" && stepParam != null) {
+      const n = Math.max(0, Math.min(Number(stepParam) || 0, STEPS.length - 1));
+      setPerfilState(DEMO_PROFILE);
+      setRespostas(demoAnswers());
+      setStepIndex(n);
+      setMaxReached(STEPS.length - 1);
+    }
     /* eslint-enable react-hooks/set-state-in-effect */
+  }, []);
+
+  // Atalho de QA (apenas dev): window.__hwGoTo(i) e __hwSeed() pra navegar livre.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (process.env.NODE_ENV === "production") return;
+    const w = window as unknown as Record<string, unknown>;
+    w.__hwGoTo = (i: number) => {
+      setMaxReached((m) => Math.max(m, i));
+      setStepIndex(i);
+    };
+    w.__hwSeed = () => {
+      setPerfilState(DEMO_PROFILE);
+      setRespostas(demoAnswers());
+      setMaxReached(STEPS.length - 1);
+    };
   }, []);
 
   const setPerfil = useCallback((p: Partial<Profile>) => {

@@ -64,8 +64,13 @@ export function TransitionScreen({
   );
 
   const jester = (
-    <span className="mb-6 block text-4xl" aria-hidden>
-      🃏
+    <span className="mb-6 inline-flex items-center gap-2.5">
+      <span className="text-2xl" aria-hidden>
+        🃏
+      </span>
+      <span className="hw-kicker text-amarelo/85">
+        o bobo · {transitionId}
+      </span>
     </span>
   );
 

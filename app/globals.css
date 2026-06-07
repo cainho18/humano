@@ -1,7 +1,13 @@
 @import "tailwindcss";
 
-/* ── PALETA HUMANWARE — ESTRITA (só estas 4 cores) ─────────────── */
+/* ════════════════════════════════════════════════════════════════
+   HUMANWARE — SISTEMA DE DESIGN v2
+   Paleta inegociável (4 cores). Tudo o mais foi repaginado:
+   escala tipográfica fluida, ritmo, grão, e tokens de movimento.
+   ════════════════════════════════════════════════════════════════ */
+
 @theme {
+  /* ── PALETA ESTRITA (só estas 4 cores) ── */
   --color-rosa: #ff00aa; /* Heartstorm — assinatura, impacto */
   --color-amarelo: #ffff00; /* Jester — provocação, hover, acentos */
   --color-claro: #f2f2f2; /* textos sobre escuro, fundos claros */
@@ -10,10 +16,32 @@
   --font-display: var(--font-display);
   --font-mono: var(--font-mono);
   --font-serif: var(--font-serif);
+
+  /* ── ESCALA TIPOGRÁFICA FLUIDA (clamp: mobile → desktop) ── */
+  --text-kicker: 0.6875rem; /* 11px — rótulos mono, tracking largo */
+  --text-meta: 0.8125rem; /* 13px */
+  --text-body: clamp(1rem, 0.95rem + 0.4vw, 1.1875rem);
+  --text-lead: clamp(1.25rem, 1.05rem + 1vw, 1.6rem);
+  --text-h3: clamp(1.5rem, 1.2rem + 1.5vw, 2.1rem);
+  --text-h2: clamp(2rem, 1.4rem + 3vw, 3.4rem);
+  --text-h1: clamp(2.6rem, 1.6rem + 5vw, 5.2rem);
+  --text-mega: clamp(3.4rem, 1.2rem + 11vw, 9rem);
+
+  /* ── MOVIMENTO ── */
+  --ease-ritual: cubic-bezier(0.22, 1, 0.36, 1); /* saída suave, peso */
+  --ease-snap: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-fast: 0.18s;
+  --dur-base: 0.32s;
+  --dur-slow: 0.6s;
+
+  /* ── ELEVAÇÃO (sombra tingida na paleta, nunca preto puro genérico) ── */
+  --shadow-rosa: 0 24px 60px -28px rgba(255, 0, 170, 0.55);
 }
 
 :root {
   color-scheme: dark;
+  --gutter: clamp(1.25rem, 5vw, 4rem);
+  --measure: 38rem; /* largura de leitura ~65ch */
 }
 
 html,
@@ -25,11 +53,41 @@ body {
 body {
   font-family: var(--font-display), system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
   overflow-x: hidden;
 }
 
-/* Cursor custom: esconde o ponteiro nativo só em dispositivos com mouse/trackpad.
-   A bolinha #F2F2F2 (CursorBall) assume o lugar. Touch mantém o normal. */
+/* Tabular para qualquer dado numérico */
+.tabular,
+[data-mono] {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* ── GRÃO GLOBAL — quebra a planura digital do preto puro ──────────
+   Overlay fixo, pointer-events-none. Não introduz cor nova: é o
+   próprio claro em baixíssima opacidade, modulado por máscara. */
+.hw-grain {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.035;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* ── MARCA GZERO — máscara recolorível (herda a cor do elemento) ── */
+.hw-gzero {
+  display: inline-block;
+  aspect-ratio: 778 / 378;
+  background-color: currentColor;
+  -webkit-mask: url("/gzero.svg") center / contain no-repeat;
+  mask: url("/gzero.svg") center / contain no-repeat;
+}
+
+/* ── CURSOR CUSTOM (só em ponteiro fino) ── */
 @media (pointer: fine) {
   html,
   body {
@@ -53,13 +111,20 @@ body {
   color: var(--color-claro);
 }
 
-/* Scrollbar discreta na paleta */
 * {
   scrollbar-color: var(--color-rosa) transparent;
 }
 
-/* ── Acessibilidade: respeitar prefers-reduced-motion ──────────── */
+/* Rolagem suave para âncoras */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Acessibilidade: respeitar prefers-reduced-motion ── */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
   *,
   *::before,
   *::after {
@@ -70,27 +135,74 @@ body {
   }
 }
 
-/* Helper: foco visível sempre (botões ritualizados) */
+/* Foco visível sempre (botões ritualizados) */
 :focus-visible {
   outline: 2px solid var(--color-amarelo);
   outline-offset: 3px;
 }
 
-/* ── Keyframes utilitários ─────────────────────────────────────── */
+/* ════════════════════════════════════════════════════════════════
+   PRIMITIVAS DE LAYOUT EDITORIAL
+   ════════════════════════════════════════════════════════════════ */
+
+/* Kicker: rótulo monospace numerado, tracking largo */
+.hw-kicker {
+  font-family: var(--font-mono), monospace;
+  font-size: var(--text-kicker);
+  text-transform: uppercase;
+  letter-spacing: 0.32em;
+  line-height: 1;
+}
+
+/* Título de tela: display, tracking apertado, sem órfãs */
+.hw-title {
+  font-family: var(--font-display), sans-serif;
+  letter-spacing: -0.03em;
+  line-height: 1.02;
+  text-wrap: balance;
+}
+
+.hw-lead {
+  font-size: var(--text-lead);
+  line-height: 1.5;
+  text-wrap: pretty;
+  max-width: 26ch;
+}
+
+/* Acento poético serifado em itálico */
+.hw-accent {
+  font-family: var(--font-serif), Georgia, serif;
+  font-style: italic;
+  letter-spacing: -0.01em;
+}
+
+/* Régua fina divisória na paleta */
+.hw-rule {
+  height: 1px;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--color-claro) 22%, transparent),
+    transparent
+  );
+}
+
+/* ════════════════════════════════════════════════════════════════
+   KEYFRAMES UTILITÁRIOS
+   ════════════════════════════════════════════════════════════════ */
 @keyframes hw-pulse-down {
   0%,
   100% {
     transform: translateY(0);
-    opacity: 0.7;
+    opacity: 0.6;
   }
   50% {
     transform: translateY(8px);
     opacity: 1;
   }
 }
-
 .hw-bounce {
-  animation: hw-pulse-down 1.6s ease-in-out infinite;
+  animation: hw-pulse-down 1.8s ease-in-out infinite;
 }
 
 @keyframes hw-flicker {
@@ -121,18 +233,35 @@ body {
     transform: translateY(0);
   }
 }
-
 .hw-perspective-in {
-  animation: hw-perspective-blur-in 0.6s ease-out both;
+  animation: hw-perspective-blur-in 0.6s var(--ease-ritual) both;
 }
 
-/* Carta flip 3D */
+/* Brilho lento de fundo (radial, palette-safe) */
+@keyframes hw-breathe {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+}
+.hw-breathe {
+  animation: hw-breathe 7s ease-in-out infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════
+   CARTA FLIP 3D
+   ════════════════════════════════════════════════════════════════ */
 .hw-flip-scene {
   perspective: 1400px;
 }
 .hw-flip-inner {
   transform-style: preserve-3d;
-  transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: transform 0.9s var(--ease-snap);
 }
 .hw-flip-inner.is-flipped {
   transform: rotateY(180deg);
@@ -145,13 +274,13 @@ body {
   transform: rotateY(180deg);
 }
 
-/* Slider bipolar / alocador de pontos
-   Alinhamento robusto: a trilha (runnable-track) tem altura explícita de 4px e
-   o thumb usa margin-top = (4 - 22)/2 = -9px para centralizar exatamente. */
+/* ════════════════════════════════════════════════════════════════
+   SLIDER BIPOLAR / ALOCADOR DE PONTOS
+   ════════════════════════════════════════════════════════════════ */
 .hw-range {
   -webkit-appearance: none;
   appearance: none;
-  background: transparent; /* a cor da trilha vem do background inline (gradiente) */
+  background: transparent;
 }
 .hw-range::-webkit-slider-runnable-track {
   height: 4px;
@@ -173,6 +302,9 @@ body {
   border: 2px solid var(--color-rosa);
   cursor: pointer;
   margin-top: -9px;
+  transition: transform var(--dur-fast) var(--ease-snap),
+    box-shadow var(--dur-fast) var(--ease-snap);
+  box-shadow: 0 0 0 0 rgba(255, 0, 170, 0.4);
 }
 .hw-range::-moz-range-thumb {
   height: 22px;
@@ -181,6 +313,12 @@ body {
   background: var(--color-claro);
   border: 2px solid var(--color-rosa);
   cursor: pointer;
+  transition: transform var(--dur-fast) var(--ease-snap);
+}
+.hw-range:hover::-webkit-slider-thumb,
+.hw-range:active::-webkit-slider-thumb {
+  transform: scale(1.15);
+  box-shadow: 0 0 0 8px rgba(255, 0, 170, 0.12);
 }
 .hw-range:focus-visible::-webkit-slider-thumb {
   outline: 2px solid var(--color-amarelo);

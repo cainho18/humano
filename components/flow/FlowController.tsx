@@ -6,10 +6,10 @@ import { useFlow } from "@/lib/state/AnswersContext";
 import { ProgressBar } from "@/components/flow/ProgressBar";
 import { JesterOverlay } from "@/components/flow/JesterOverlay";
 import { RetroMap } from "@/components/flow/RetroMap";
+import { Signature } from "@/components/flow/Signature";
 
-import { OpeningCounter } from "@/components/screens/opening/OpeningCounter";
+import { LogoLoader } from "@/components/screens/opening/LogoLoader";
 import { OpeningPortal } from "@/components/screens/opening/OpeningPortal";
-import { OpeningWelcome } from "@/components/screens/opening/OpeningWelcome";
 import { ProfileScreen } from "@/components/screens/entry/ProfileScreen";
 import { AgreementScreen } from "@/components/screens/entry/AgreementScreen";
 import { TransitionScreen } from "@/components/screens/transitions/TransitionScreen";
@@ -29,16 +29,13 @@ export function FlowController() {
     return () => clearTimeout(id);
   }, [stepIndex, step.kind, fireIdle]);
 
-  let screen: ReactElement = <OpeningCounter />;
+  let screen: ReactElement = <LogoLoader />;
   switch (step.kind) {
     case "counter":
-      screen = <OpeningCounter />;
+      screen = <LogoLoader />;
       break;
     case "portal":
       screen = <OpeningPortal />;
-      break;
-    case "welcome":
-      screen = <OpeningWelcome />;
       break;
     case "profile":
       screen = <ProfileScreen />;
@@ -73,6 +70,7 @@ export function FlowController() {
       </AnimatePresence>
       <RetroMap />
       <JesterOverlay />
+      <Signature />
     </div>
   );
 }

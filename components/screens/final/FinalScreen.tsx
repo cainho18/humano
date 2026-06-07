@@ -15,6 +15,7 @@ import { FINAL_FALA } from "@/lib/content/jester";
 
 import { TextScramble } from "@/components/ui/text-scramble";
 import { FlashlightText } from "@/components/ui/flashlight-text";
+import { GZeroMark } from "@/components/ui/gzero-mark";
 import { Accordion } from "./Accordion";
 import { Radar } from "./Radar";
 
@@ -226,8 +227,10 @@ export function FinalScreen() {
             }}
           />
           <div className="relative z-10 mx-auto max-w-2xl text-center">
-            <span className="mb-6 inline-block rounded-full border border-claro/20 px-3 py-1 font-mono text-[10px] uppercase tracking-[0.3em] text-claro/60">
-              o espelho
+            <span className="mb-8 inline-flex items-center gap-3">
+              <GZeroMark className="h-3 text-claro/50" />
+              <span className="h-3 w-px bg-claro/20" aria-hidden />
+              <span className="hw-kicker text-claro/55">o espelho</span>
             </span>
             <p className="font-display text-2xl leading-relaxed md:text-4xl">
               {voc(FINAL_FALA)}
@@ -633,6 +636,13 @@ export function FinalScreen() {
               >
                 guardar o retrato
               </button>
+              <div className="mt-8 flex items-center justify-center gap-2 border-t border-claro/10 pt-6">
+                <span className="hw-kicker text-claro/35">humanware®</span>
+                <span className="text-claro/20" aria-hidden>
+                  ·
+                </span>
+                <GZeroMark className="h-2.5 text-claro/55" />
+              </div>
             </div>
           </div>
         </section>

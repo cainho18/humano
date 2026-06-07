@@ -12,6 +12,8 @@ interface ScreenShellProps {
   center?: boolean;
   /** allow the screen to scroll (welcome, long blocks) */
   scroll?: boolean;
+  /** ambient radial glow behind content (palette-safe) */
+  glow?: "rosa" | "amarelo" | null;
 }
 
 const BG: Record<string, string> = {
@@ -21,6 +23,11 @@ const BG: Record<string, string> = {
   none: "",
 };
 
+const GLOW: Record<string, string> = {
+  rosa: "rgba(255,0,170,0.16)",
+  amarelo: "rgba(255,255,0,0.10)",
+};
+
 /** Ritual wrapper: soft fade entrance, consistent layout, palette background. */
 export function ScreenShell({
   children,
@@ -28,23 +35,33 @@ export function ScreenShell({
   bg = "preto",
   center = true,
   scroll = false,
+  glow = null,
 }: ScreenShellProps) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      transition={{ duration: 0.6, ease: "easeInOut" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "min-h-dvh w-full",
+        "relative min-h-dvh w-full",
         BG[bg],
         scroll ? "overflow-y-auto" : "overflow-hidden",
         center && "flex flex-col items-center justify-center",
-        "px-6 py-16",
+        "px-[var(--gutter)] py-24",
         className
       )}
     >
-      {children}
+      {glow && (
+        <div
+          aria-hidden
+          className="hw-breathe pointer-events-none absolute inset-0 -z-0"
+          style={{
+            background: `radial-gradient(50% 42% at 50% 38%, ${GLOW[glow]}, transparent 72%)`,
+          }}
+        />
+      )}
+      <div className="relative z-10 w-full">{children}</div>
     </motion.div>
   );
 }

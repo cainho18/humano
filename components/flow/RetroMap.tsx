@@ -125,9 +125,10 @@ export function RetroMap() {
   return (
     <>
       {/* DESKTOP: painel fixo no canto inferior direito */}
-      <div className="pointer-events-auto fixed bottom-4 right-4 z-40 hidden max-w-[320px] border-2 border-claro/30 bg-preto/90 p-3 shadow-[5px_5px_0_0_#000] backdrop-blur-sm md:block">
-        <div className="mb-2 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.3em] text-amarelo">
-          <MapIcon size={12} /> mapa · volte pra mudar
+      <div className="pointer-events-auto fixed bottom-4 right-4 z-40 hidden max-w-[320px] border border-claro/25 bg-preto/90 p-4 shadow-[0_20px_50px_-22px_rgba(255,0,170,0.5)] backdrop-blur-sm md:block">
+        <div className="mb-3 flex items-center gap-2 text-amarelo">
+          <MapIcon size={12} />
+          <span className="hw-kicker">mapa · volte pra mudar</span>
         </div>
         <Track />
       </div>
@@ -144,9 +145,9 @@ export function RetroMap() {
 
       {open && (
         <div className="fixed inset-0 z-50 flex items-end bg-preto/70 backdrop-blur-sm md:hidden">
-          <div className="w-full border-t-2 border-amarelo bg-preto p-5">
+          <div className="w-full border-t border-amarelo/70 bg-preto p-5">
             <div className="mb-4 flex items-center justify-between">
-              <span className="font-mono text-[10px] uppercase tracking-[0.3em] text-amarelo">
+              <span className="hw-kicker text-amarelo">
                 mapa · toque pra voltar
               </span>
               <button

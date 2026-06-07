@@ -18,31 +18,39 @@ export function PointsAllocator({ values, onChange }: PointsAllocatorProps) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-baseline justify-between border-b-2 border-claro/20 pb-3">
-        <span className="font-mono text-xs uppercase tracking-widest text-claro/60">
-          pontos restantes
-        </span>
-        <span
-          className={cn(
-            "font-mono text-3xl font-bold tabular-nums",
-            remaining === 0 ? "text-rosa" : "text-amarelo"
-          )}
-        >
-          {remaining}
+      <div className="sticky top-16 z-10 -mx-2 flex items-baseline justify-between bg-preto/85 px-2 pb-3 pt-1 backdrop-blur-sm">
+        <span className="hw-kicker text-claro/55">pontos restantes</span>
+        <span className="flex items-baseline gap-2">
+          <span
+            className={cn(
+              "hw-title font-bold tabular-nums transition-colors",
+              remaining === 0 ? "text-rosa" : "text-amarelo"
+            )}
+            style={{ fontSize: "var(--text-h2)" }}
+          >
+            {remaining}
+          </span>
+          <span className="hw-kicker text-claro/30">/ {PRIORITY_TOTAL}</span>
         </span>
       </div>
+      <div className="hw-rule -mt-2" />
 
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-6">
         {PRIORITY_CATEGORIES.map((c) => {
           const val = values[c.id] ?? 0;
           const max = val + remaining;
           return (
-            <div key={c.id} className="flex flex-col gap-2">
-              <div className="flex items-center justify-between gap-3">
+            <div key={c.id} className="flex flex-col gap-2.5">
+              <div className="flex items-baseline justify-between gap-3">
                 <span className="font-mono text-sm leading-snug text-claro/85">
                   {c.label}
                 </span>
-                <span className="w-10 shrink-0 text-right font-mono text-lg font-bold tabular-nums text-claro">
+                <span
+                  className={cn(
+                    "w-12 shrink-0 text-right font-display text-2xl font-bold tabular-nums transition-colors",
+                    val > 0 ? "text-claro" : "text-claro/25"
+                  )}
+                >
                   {val}
                 </span>
               </div>

@@ -11,8 +11,9 @@ export function GlassCard({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-claro/15 bg-black/45 px-6 py-7 backdrop-blur-md",
-        "shadow-[0_8px_40px_rgba(0,0,0,0.45)] supports-[backdrop-filter]:bg-black/35",
+        "relative rounded-2xl border border-claro/15 bg-black/45 px-6 py-7 backdrop-blur-md",
+        "shadow-[0_8px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(242,242,242,0.12)]",
+        "supports-[backdrop-filter]:bg-black/35",
         className
       )}
     >

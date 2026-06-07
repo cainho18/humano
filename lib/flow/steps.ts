@@ -22,7 +22,6 @@ export type CardField = "comodo" | "fora_dentro" | "cena" | "nome_secreto";
 export type Step =
   | { kind: "counter" }
   | { kind: "portal" }
-  | { kind: "welcome" }
   | { kind: "profile" }
   | { kind: "agreement" }
   | { kind: "transition"; transitionId: string; effect: TransitionEffect }
@@ -33,7 +32,6 @@ export type Step =
 export const STEPS: Step[] = [
   { kind: "counter" },
   { kind: "portal" },
-  { kind: "welcome" },
   { kind: "profile" },
   { kind: "agreement" },
 

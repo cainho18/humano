@@ -13,8 +13,16 @@ import { CARD4_INTRO } from "@/lib/content/jester";
 import type { CardField } from "@/lib/flow/steps";
 import { cn } from "@/lib/cn";
 
+const CARD_META: Record<CardField, { num: string; label: string }> = {
+  comodo: { num: "i", label: "o cômodo" },
+  fora_dentro: { num: "ii", label: "fora / dentro" },
+  cena: { num: "iii", label: "a cena" },
+  nome_secreto: { num: "iv", label: "o nome secreto" },
+};
+
 /** Carta qualitativa: vira a carta (vibe mágica, heatmap) → pergunta + campo. */
 export function CardScreen({ field }: { field: CardField }) {
+  const meta = CARD_META[field];
   const { respostas, setCard, next, voc } = useFlow();
   const def = CARDS[field];
   const [flipped, setFlipped] = useState(false);
@@ -28,6 +36,11 @@ export function CardScreen({ field }: { field: CardField }) {
   return (
     <ScreenShell bg="preto" scroll>
       <div className="mx-auto flex w-full max-w-xl flex-col items-center gap-8">
+        <div className="flex items-center gap-3 self-start">
+          <span className="hw-kicker tabular text-rosa">carta · {meta.num}</span>
+          <span className="h-px w-8 bg-rosa/40" aria-hidden />
+          <span className="hw-kicker text-claro/45">{meta.label}</span>
+        </div>
         <div className="hw-flip-scene w-full">
           <div
             className={cn(
@@ -50,7 +63,7 @@ export function CardScreen({ field }: { field: CardField }) {
                 <span className="font-serif text-7xl text-claro drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
                   ✦
                 </span>
-                <span className="font-mono text-xs uppercase tracking-[0.5em] text-claro drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+                <span className="hw-kicker text-claro drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]" style={{ letterSpacing: "0.45em" }}>
                   vira a carta
                 </span>
               </span>
@@ -66,7 +79,10 @@ export function CardScreen({ field }: { field: CardField }) {
                       {intro}
                     </p>
                   )}
-                  <p className="font-display text-xl leading-snug text-claro md:text-2xl">
+                  <p
+                    className="hw-title text-claro"
+                    style={{ fontSize: "var(--text-h3)" }}
+                  >
                     {def.prompt}
                   </p>
                   {def.sub && (

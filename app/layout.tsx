@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Space_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { CursorBall } from "@/components/ui/cursor-ball";
+import { Grain } from "@/components/ui/grain";
 
 // fonte variável (eixo de peso contínuo) — usada no hover do HUMANWARE
 const display = Space_Grotesk({
@@ -41,6 +42,7 @@ export default function RootLayout({
       <body className="min-h-full bg-preto text-claro">
         <CursorBall />
         {children}
+        <Grain />
       </body>
     </html>
   );

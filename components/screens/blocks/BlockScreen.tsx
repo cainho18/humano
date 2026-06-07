@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import { ScreenShell } from "@/components/flow/ScreenShell";
 import { RitualButton } from "@/components/ui/button-fx";
 import { useFlow } from "@/lib/state/AnswersContext";
@@ -27,6 +28,27 @@ const HEADERS: Record<BlockId, string> = {
   thermometers: "Onde a sua organização vive",
   words: "O jogo das palavras",
   structural: "A engrenagem por baixo",
+};
+
+/** Número editorial de cada bloco (1–7), pra dar ritmo de capítulo. */
+const BLOCK_NUM: Record<BlockId, string> = {
+  scenarios: "01",
+  sliders: "02",
+  priority: "03",
+  behaviors: "04",
+  thermometers: "05",
+  words: "06",
+  structural: "07",
+};
+
+const KICKER: Record<BlockId, string> = {
+  scenarios: "cena",
+  sliders: "tensão",
+  priority: "alocação",
+  behaviors: "rastro",
+  thermometers: "termômetro",
+  words: "palavra",
+  structural: "engrenagem",
 };
 
 /** Lembrete curto de como responder — fica visível durante o bloco. */
@@ -192,28 +214,53 @@ export function BlockScreen({ block }: { block: BlockId }) {
 
   return (
     <ScreenShell bg="preto" scroll center={false}>
-      <div className="mx-auto flex w-full max-w-2xl flex-col gap-12 py-8">
-        <div className="flex flex-col gap-3">
-          <h2 className="font-mono text-xs uppercase tracking-[0.3em] text-rosa">
-            {HEADERS[block]}
-          </h2>
+      <motion.div
+        initial={{ opacity: 0, y: 22 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="mx-auto flex w-full max-w-2xl flex-col gap-14 py-6"
+      >
+        <header className="flex flex-col gap-5">
+          <div className="flex items-baseline gap-4">
+            <span
+              className="hw-title tabular leading-none text-rosa/90"
+              style={{ fontSize: "var(--text-h1)" }}
+            >
+              {BLOCK_NUM[block]}
+            </span>
+            <div className="flex flex-1 flex-col gap-2 pb-1">
+              <span className="hw-kicker text-claro/40">
+                {KICKER[block]} · {BLOCK_NUM[block]}/07
+              </span>
+              <h2
+                className="hw-title text-claro"
+                style={{ fontSize: "var(--text-h3)" }}
+              >
+                {HEADERS[block]}
+              </h2>
+            </div>
+          </div>
           {SUBHEADS[block] && (
-            <p className="max-w-xl font-mono text-xs leading-relaxed text-claro/55">
+            <p className="max-w-[58ch] border-l border-rosa/40 pl-4 font-mono text-xs leading-relaxed text-claro/60">
               {SUBHEADS[block]}
             </p>
           )}
-        </div>
+          <div className="hw-rule" />
+        </header>
         {body}
-        <div className="sticky bottom-6 flex justify-end pt-4">
+        <div className="sticky bottom-6 z-20 flex items-center justify-between gap-4 pt-4">
+          <span className="hw-kicker text-claro/30">
+            {complete ? "completo" : "responde tudo pra seguir"}
+          </span>
           <RitualButton
-            label={complete ? "Seguir" : "Responde tudo pra seguir"}
+            label={complete ? "Seguir" : "Falta responder"}
             fx={complete ? "fill" : "plain"}
             accent="rosa"
             disabled={!complete}
             onClick={next}
           />
         </div>
-      </div>
+      </motion.div>
     </ScreenShell>
   );
 }
