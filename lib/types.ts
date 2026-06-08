@@ -8,7 +8,8 @@ export interface Profile {
   pronome: Pronoun | null;
 }
 
-export type ScenarioKey = "a" | "b" | "c" | "d";
+/** "e" = "outro cenário" (texto/voz livre, não pontua). */
+export type ScenarioKey = "a" | "b" | "c" | "d" | "e";
 
 /** Likert stored as raw index 0..4 (scoring maps to 0..100). */
 export type LikertIndex = 0 | 1 | 2 | 3 | 4;
@@ -19,6 +20,8 @@ export type WordSlot = "move" | "fala" | "nao";
 export interface Answers {
   /** C1..C15 → chosen alternative */
   scenarios: Record<string, ScenarioKey>;
+  /** texto livre quando a alternativa "e" (outro cenário) é escolhida */
+  scenariosOther: Record<string, string>;
   /** slider 1..8 → 0 (humano) .. 100 (máquina) */
   sliders: Record<number, number>;
   /** P-R2 categories → 0..100 points (sum 100) */
@@ -48,6 +51,7 @@ export interface SessionData {
 export function emptyAnswers(): Answers {
   return {
     scenarios: {},
+    scenariosOther: {},
     sliders: {},
     priority: {},
     behaviors: {},

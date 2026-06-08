@@ -40,7 +40,7 @@ export const TRANSITIONS: Record<string, TransitionDef> = {
   },
   T6: {
     id: "T6",
-    fala: "Joguinho de palavras agora. Mais sério do que parece. Vou te dar um monte de palavra. Você joga cada uma no lugar onde ela vive de verdade aí dentro. Repara bem: tem diferença entre o que MOVE a parada e o que a gente só FALA que move. É aí que mora o babado.",
+    fala: "Joguinho de palavras agora. Mais sério do que parece. Vou te dar um monte de palavras. Você joga cada uma no lugar onde ela vive de verdade aí dentro. Repara bem: tem diferença entre o que MOVE a parada e o que a gente só FALA que move. É aí que mora o babado.",
     button: "Espalhar as palavras",
   },
   T7: {

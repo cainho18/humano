@@ -63,6 +63,25 @@ export const STEPS: Step[] = [
   { kind: "final" },
 ];
 
+/** Índices das "estações" (blocos + cartas) — base da numeração única
+ *  usada tanto nos títulos das telas quanto no mapa. */
+export const STATION_INDICES: number[] = STEPS.reduce<number[]>(
+  (acc, s, i) => {
+    if (s.kind === "block" || s.kind === "card") acc.push(i);
+    return acc;
+  },
+  []
+);
+
+/** Ordinal 1-based da estação (bloco/carta) no mapa, ou null. */
+export function stationOrdinal(stepIndex: number): number | null {
+  const pos = STATION_INDICES.indexOf(stepIndex);
+  return pos === -1 ? null : pos + 1;
+}
+
+/** Total de estações (pra exibir "NN / total" se necessário). */
+export const STATION_TOTAL = STATION_INDICES.length;
+
 /** Steps that count toward the (discreet) progress bar — question content. */
 export const FIRST_PROGRESS_INDEX = STEPS.findIndex(
   (s) => s.kind === "transition"

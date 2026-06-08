@@ -12,7 +12,10 @@ interface LikertScaleProps {
 /** Escala de 5 pontos (frequência / intensidade). */
 export function LikertScale({ scale, value, onChange }: LikertScaleProps) {
   return (
-    <div className="grid grid-cols-5 gap-2">
+    <div
+      className="grid gap-2"
+      style={{ gridTemplateColumns: `repeat(${scale.length}, minmax(0, 1fr))` }}
+    >
       {scale.map((label, i) => {
         const active = value === i;
         return (

@@ -22,7 +22,7 @@ const SHADOW_WORDS = ["competicao","medo"];
 function levelToScenario(level: number): ScenarioKey {
   let best: ScenarioKey = "a";
   let bestD = Infinity;
-  (Object.keys(SCENARIO_WEIGHTS) as ScenarioKey[]).forEach((k) => {
+  (Object.keys(SCENARIO_WEIGHTS) as (keyof typeof SCENARIO_WEIGHTS)[]).forEach((k) => {
     const d = Math.abs(SCENARIO_WEIGHTS[k] - level);
     if (d < bestD) {
       bestD = d;
@@ -33,6 +33,9 @@ function levelToScenario(level: number): ScenarioKey {
 }
 const levelToLikert = (level: number): LikertIndex =>
   Math.max(0, Math.min(4, Math.round(level / 25))) as LikertIndex;
+// comportamentos: escala de 4 pontos (0..3)
+const levelToLikert4 = (level: number): LikertIndex =>
+  Math.max(0, Math.min(3, Math.round(level / 33.333))) as LikertIndex;
 
 interface BuildOpts {
   practice?: number;
@@ -57,7 +60,7 @@ function build({
   for (let i = 1; i <= 8; i++) a.sliders[i] = 100 - discourse; // humanidade = discourse
   BEH_IDS.forEach((id) => {
     const target = INV_BEH.has(id) ? 100 - practice : practice;
-    a.behaviors[id] = levelToLikert(target);
+    a.behaviors[id] = levelToLikert4(target);
   });
   STRUCT_N.forEach((n) => (a.structural[`S${n}`] = levelToLikert(practice)));
   // termômetros: 1,3,5 humano à esquerda (discurso/sentir); 2,4 textura (prática)
@@ -169,8 +172,8 @@ export const FIXTURES: Record<string, Fixture> = {
       },
       overrides: (a) => {
         // afeto/intimidade altos, autonomia baixa
-        a.behaviors.B3 = 4;
-        a.behaviors.B4 = 4;
+        a.behaviors.B3 = 3;
+        a.behaviors.B4 = 3;
         a.sliders[5] = 5; // Vínculo (humano)
         a.sliders[2] = 10; // Afeto (humano)
         a.scenarios.C3 = "d";
@@ -205,8 +208,8 @@ export const FIXTURES: Record<string, Fixture> = {
         a.scenarios.C2 = "c";
         a.scenarios.C7 = "c";
         a.scenarios.C14 = "d";
-        a.behaviors.B2 = 4;
-        a.behaviors.B9 = 4;
+        a.behaviors.B2 = 3;
+        a.behaviors.B9 = 3;
         a.structural.S3 = 4;
         a.structural.S6 = 4;
         // D6 estrutural alto, afetabilidade baixa
@@ -245,8 +248,8 @@ export const FIXTURES: Record<string, Fixture> = {
         a.scenarios.C1 = "c";
         a.scenarios.C7 = "c";
         a.scenarios.C8 = "d";
-        a.behaviors.B5 = 4;
-        a.behaviors.B9 = 4;
+        a.behaviors.B5 = 3;
+        a.behaviors.B9 = 3;
         a.behaviors.B10 = 0; // inv → alto
         a.sliders[6] = 5;
         a.sliders[7] = 5;
@@ -272,11 +275,11 @@ export const FIXTURES: Record<string, Fixture> = {
       overrides: (a) => {
         // D2, D10, D13 altos; D6-Estrutural baixo; D9≥60 mas sub-9.4 baixo
         a.scenarios.C1 = "d";
-        a.behaviors.B5 = 4;
+        a.behaviors.B5 = 3;
         a.sliders[6] = 5;
         a.sliders[7] = 5;
         a.scenarios.C8 = "d";
-        a.behaviors.B9 = 4;
+        a.behaviors.B9 = 3;
         a.thermometers[4] = 95;
         a.thermometers[1] = 5; // sentir (polo humano → D13 alto)
         a.thermometers[3] = 5;
@@ -293,7 +296,7 @@ export const FIXTURES: Record<string, Fixture> = {
         a.structural.S1 = 1; // sem propriedade coletiva
         // D6-Estrutural baixo (sem amortecedor)
         a.scenarios.C5 = "a";
-        a.behaviors.B7 = 4; // inv → baixo
+        a.behaviors.B7 = 3; // inv → baixo
         a.structural.S2 = 1;
         a.structural.S8 = 1;
       },

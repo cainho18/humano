@@ -17,7 +17,8 @@ export const CARDS: Record<"comodo" | "fora_dentro" | "cena" | "nome_secreto", C
   fora_dentro: {
     field: "fora_dentro",
     prompt:
-      "O que a sua organização cria — responde a uma pergunta que veio de fora, ou a uma pergunta que nasceu de dentro?",
+      "Quando a sua organização cria algo novo, de onde costuma vir o empurrão: de uma demanda de FORA (o mercado pediu, o cliente cobrou, o concorrente lançou) ou de uma vontade de DENTRO (uma ideia, uma inquietação, um jeito próprio de ver o mundo)?",
+    sub: "Não tem certo nem errado — a maioria vive um pouco dos dois. Conta qual lado puxa mais, com um exemplo se vier.",
   },
   cena: {
     field: "cena",

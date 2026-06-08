@@ -10,20 +10,23 @@ import { useFlow } from "@/lib/state/AnswersContext";
 import { useSpeechToText } from "@/lib/useSpeechToText";
 import { CARDS } from "@/lib/content/cards";
 import { CARD4_INTRO } from "@/lib/content/jester";
-import type { CardField } from "@/lib/flow/steps";
+import { stationOrdinal, type CardField } from "@/lib/flow/steps";
 import { cn } from "@/lib/cn";
 
-const CARD_META: Record<CardField, { num: string; label: string }> = {
-  comodo: { num: "i", label: "o cômodo" },
-  fora_dentro: { num: "ii", label: "fora / dentro" },
-  cena: { num: "iii", label: "a cena" },
-  nome_secreto: { num: "iv", label: "o nome secreto" },
+const CARD_LABEL: Record<CardField, string> = {
+  comodo: "o cômodo",
+  fora_dentro: "fora / dentro",
+  cena: "a cena",
+  nome_secreto: "o nome secreto",
 };
 
 /** Carta qualitativa: vira a carta (vibe mágica, heatmap) → pergunta + campo. */
 export function CardScreen({ field }: { field: CardField }) {
-  const meta = CARD_META[field];
-  const { respostas, setCard, next, voc } = useFlow();
+  const { respostas, setCard, next, voc, stepIndex } = useFlow();
+  const meta = {
+    num: String(stationOrdinal(stepIndex) ?? 1).padStart(2, "0"),
+    label: CARD_LABEL[field],
+  };
   const def = CARDS[field];
   const [flipped, setFlipped] = useState(false);
   const intro = field === "nome_secreto" ? voc(CARD4_INTRO) : null;

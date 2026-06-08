@@ -113,7 +113,11 @@ function Track({ onJump }: { onJump?: () => void }) {
   );
 }
 
-/** Mini-mapa retrô (level-select). Desktop: fixo no canto. Mobile: botão→overlay. */
+/**
+ * Mini-mapa (level-select) no canto inferior ESQUERDO, acima da assinatura
+ * gzero. Recolhido = pílula; expandido = painel que abre pra cima. Funciona
+ * igual em desktop e mobile (expandir/recolher).
+ */
 export function RetroMap() {
   const { stepIndex } = useFlow();
   const [open, setOpen] = useState(false);
@@ -122,47 +126,46 @@ export function RetroMap() {
   const firstStation = STATIONS[0]?.index ?? Infinity;
   if (stepIndex < firstStation) return null;
 
+  // estação atual (ordinal 1-based)
+  let ordinal = 1;
+  STATIONS.forEach((st, i) => {
+    if (st.index <= stepIndex) ordinal = i + 1;
+  });
+
   return (
-    <>
-      {/* DESKTOP: painel fixo no canto inferior direito */}
-      <div className="pointer-events-auto fixed bottom-4 right-4 z-40 hidden max-w-[320px] border border-claro/25 bg-preto/90 p-4 shadow-[0_20px_50px_-22px_rgba(255,0,170,0.5)] backdrop-blur-sm md:block">
-        <div className="mb-3 flex items-center gap-2 text-amarelo">
-          <MapIcon size={12} />
-          <span className="hw-kicker">mapa · volte pra mudar</span>
-        </div>
-        <Track />
-      </div>
-
-      {/* MOBILE: botão pixelado que abre overlay */}
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-label="abrir mapa"
-        className="fixed bottom-4 right-4 z-40 flex h-12 w-12 items-center justify-center border-2 border-amarelo bg-preto text-amarelo shadow-[3px_3px_0_0_#ff00aa] md:hidden"
-      >
-        <MapIcon size={20} />
-      </button>
-
-      {open && (
-        <div className="fixed inset-0 z-50 flex items-end bg-preto/70 backdrop-blur-sm md:hidden">
-          <div className="w-full border-t border-amarelo/70 bg-preto p-5">
-            <div className="mb-4 flex items-center justify-between">
-              <span className="hw-kicker text-amarelo">
-                mapa · toque pra voltar
+    <div className="fixed bottom-14 left-[var(--gutter)] z-40">
+      <div className="relative">
+        {open && (
+          <div className="absolute bottom-full left-0 mb-3 w-[min(86vw,360px)] border border-claro/25 bg-preto/95 p-4 shadow-[0_22px_55px_-22px_rgba(255,0,170,0.55)] backdrop-blur-sm">
+            <div className="mb-3 flex items-center justify-between">
+              <span className="hw-kicker flex items-center gap-2 text-amarelo">
+                <MapIcon size={12} /> mapa · volte pra mudar
               </span>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label="fechar mapa"
-                className="flex h-8 w-8 items-center justify-center border border-claro/30 text-claro"
+                aria-label="recolher mapa"
+                className="text-claro/60 transition-colors hover:text-rosa"
               >
-                <X size={16} />
+                <X size={15} />
               </button>
             </div>
             <Track onJump={() => setOpen(false)} />
           </div>
-        </div>
-      )}
-    </>
+        )}
+        <button
+          type="button"
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+          aria-label={open ? "recolher mapa" : "expandir mapa"}
+          className="flex items-center gap-2 border border-claro/25 bg-preto/85 px-3 py-2 text-amarelo backdrop-blur-sm transition-colors hover:border-amarelo/60"
+        >
+          <MapIcon size={13} />
+          <span className="hw-kicker tabular">
+            mapa · {ordinal}/{STATIONS.length}
+          </span>
+        </button>
+      </div>
+    </div>
   );
 }

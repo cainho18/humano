@@ -28,6 +28,7 @@ interface AnswersCtx {
   respostas: Answers;
   setPerfil: (p: Partial<Profile>) => void;
   setScenario: (id: string, key: ScenarioKey) => void;
+  setScenarioOther: (id: string, text: string) => void;
   setSlider: (id: number, value: number) => void;
   setPriority: (id: string, value: number) => void;
   setBehavior: (id: string, value: LikertIndex) => void;
@@ -126,6 +127,13 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
 
   const setScenario = useCallback((id: string, key: ScenarioKey) => {
     setRespostas((r) => ({ ...r, scenarios: { ...r.scenarios, [id]: key } }));
+  }, []);
+
+  const setScenarioOther = useCallback((id: string, text: string) => {
+    setRespostas((r) => ({
+      ...r,
+      scenariosOther: { ...r.scenariosOther, [id]: text },
+    }));
   }, []);
   const setSlider = useCallback((id: number, value: number) => {
     setRespostas((r) => ({ ...r, sliders: { ...r.sliders, [id]: value } }));
@@ -242,6 +250,7 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
       respostas,
       setPerfil,
       setScenario,
+      setScenarioOther,
       setSlider,
       setPriority,
       setBehavior,
@@ -269,6 +278,7 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
       respostas,
       setPerfil,
       setScenario,
+      setScenarioOther,
       setSlider,
       setPriority,
       setBehavior,

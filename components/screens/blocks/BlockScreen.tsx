@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ScreenShell } from "@/components/flow/ScreenShell";
 import { RitualButton } from "@/components/ui/button-fx";
 import { useFlow } from "@/lib/state/AnswersContext";
-import type { BlockId } from "@/lib/flow/steps";
+import { stationOrdinal, type BlockId } from "@/lib/flow/steps";
 
 import { ScenarioChoice } from "@/components/inputs/ScenarioChoice";
 import { BipolarSlider } from "@/components/inputs/BipolarSlider";
@@ -30,27 +30,6 @@ const HEADERS: Record<BlockId, string> = {
   structural: "A engrenagem por baixo",
 };
 
-/** Número editorial de cada bloco (1–7), pra dar ritmo de capítulo. */
-const BLOCK_NUM: Record<BlockId, string> = {
-  scenarios: "01",
-  sliders: "02",
-  priority: "03",
-  behaviors: "04",
-  thermometers: "05",
-  words: "06",
-  structural: "07",
-};
-
-const KICKER: Record<BlockId, string> = {
-  scenarios: "cena",
-  sliders: "tensão",
-  priority: "alocação",
-  behaviors: "rastro",
-  thermometers: "termômetro",
-  words: "palavra",
-  structural: "engrenagem",
-};
-
 /** Lembrete curto de como responder — fica visível durante o bloco. */
 const SUBHEADS: Partial<Record<BlockId, string>> = {
   sliders:
@@ -63,13 +42,20 @@ const SUBHEADS: Partial<Record<BlockId, string>> = {
 export function BlockScreen({ block }: { block: BlockId }) {
   const flow = useFlow();
   const { respostas, next, noteAnswer } = flow;
+  const num = stationOrdinal(flow.stepIndex);
 
   let body: React.ReactNode = null;
   let complete = false;
 
   switch (block) {
     case "scenarios": {
-      complete = SCENARIOS.every((s) => respostas.scenarios[s.id]);
+      // "e" (outro cenário) só conta como respondido se tiver texto
+      complete = SCENARIOS.every((s) => {
+        const k = respostas.scenarios[s.id];
+        if (!k) return false;
+        if (k === "e") return (respostas.scenariosOther[s.id] ?? "").trim().length > 0;
+        return true;
+      });
       body = (
         <div className="flex flex-col gap-16">
           {SCENARIOS.map((s) => (
@@ -77,6 +63,8 @@ export function BlockScreen({ block }: { block: BlockId }) {
               key={s.id}
               scenario={s}
               value={respostas.scenarios[s.id]}
+              otherText={respostas.scenariosOther[s.id] ?? ""}
+              onOtherChange={(t) => flow.setScenarioOther(s.id, t)}
               onChange={(key) => {
                 flow.setScenario(s.id, key);
                 noteAnswer(key);
@@ -223,22 +211,17 @@ export function BlockScreen({ block }: { block: BlockId }) {
         <header className="flex flex-col gap-5">
           <div className="flex items-baseline gap-4">
             <span
-              className="hw-title tabular leading-none text-rosa/90"
+              className="hw-title tabular leading-[0.8] text-rosa"
               style={{ fontSize: "var(--text-h1)" }}
             >
-              {BLOCK_NUM[block]}
+              {String(num ?? 1).padStart(2, "0")}
             </span>
-            <div className="flex flex-1 flex-col gap-2 pb-1">
-              <span className="hw-kicker text-claro/40">
-                {KICKER[block]} · {BLOCK_NUM[block]}/07
-              </span>
-              <h2
-                className="hw-title text-claro"
-                style={{ fontSize: "var(--text-h3)" }}
-              >
-                {HEADERS[block]}
-              </h2>
-            </div>
+            <h2
+              className="hw-title text-claro"
+              style={{ fontSize: "var(--text-h3)" }}
+            >
+              {HEADERS[block]}
+            </h2>
           </div>
           {SUBHEADS[block] && (
             <p className="max-w-[58ch] border-l border-rosa/40 pl-4 font-mono text-xs leading-relaxed text-claro/60">

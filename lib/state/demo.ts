@@ -47,6 +47,7 @@ export function demoAnswers(): Answers {
 
   return {
     scenarios,
+    scenariosOther: {},
     sliders,
     priority,
     behaviors,

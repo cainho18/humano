@@ -6,12 +6,12 @@ export interface BehaviorDef {
   inverted?: boolean;
 }
 
+// Escala de 4 pontos (antes 5 — "Muitas"/"É comum" eram redundantes).
 export const BEHAVIOR_SCALE = [
   "Nunca",
   "1 vez",
   "Algumas",
   "Muitas",
-  "É comum",
 ] as const;
 
 export const BEHAVIORS: BehaviorDef[] = [
@@ -28,7 +28,7 @@ export const BEHAVIORS: BehaviorDef[] = [
   {
     id: "B3",
     dims: ["D1", "D3"],
-    text: 'Você ou alguém da chefia admitiu, na frente dos outros: "errei" ou "tô em dúvida".',
+    text: "Você ou alguém da chefia admitiu, na frente dos outros: “errei” ou “tô em dúvida”.",
   },
   {
     id: "B4",

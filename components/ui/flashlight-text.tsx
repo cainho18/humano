@@ -11,13 +11,14 @@ interface FlashlightTextProps {
 }
 
 /**
- * Lanterna (desktop): fundo preto, texto escondido (#000 sobre #000) e revelado
- * em #FF00AA só onde o cursor (luz #F2F2F2) passa. Volta a sumir ao sair.
+ * Lanterna: fundo preto; um disco de luz CLARO (#F2F2F2) segue o cursor e
+ * revela o texto em #FF00AA só dentro dele. Borda do disco bem suave (sem
+ * "quina" retangular) — a luz e o texto usam o MESMO gradiente radial.
  */
 export function FlashlightText({
   text,
   className,
-  radius = 150,
+  radius = 190,
 }: FlashlightTextProps) {
   const wrapRef = useRef<HTMLDivElement>(null);
   const raf = useRef(0);
@@ -52,36 +53,34 @@ export function FlashlightText({
     };
   }, [radius]);
 
-  const maskStyle: React.CSSProperties = {
-    WebkitMaskImage:
-      "radial-gradient(circle var(--r) at var(--x) var(--y), #000 55%, transparent 100%)",
-    maskImage:
-      "radial-gradient(circle var(--r) at var(--x) var(--y), #000 55%, transparent 100%)",
-  };
-
   return (
     <div
       ref={wrapRef}
       className={cn(
-        "relative flex min-h-[60vh] items-center justify-center overflow-hidden bg-preto px-8",
+        "relative flex min-h-[64vh] w-full items-center justify-center overflow-hidden bg-preto",
         className
       )}
       aria-label={text}
     >
-      {/* feixe da lanterna (#F2F2F2) */}
+      {/* disco de luz claro — borda bem suave, sem quina */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
         style={{
           background:
-            "radial-gradient(circle var(--r) at var(--x) var(--y), rgba(242,242,242,0.18), transparent 70%)",
+            "radial-gradient(circle var(--r) at var(--x) var(--y), #f2f2f2 0%, #f2f2f2 55%, rgba(242,242,242,0.55) 70%, transparent 82%)",
         }}
         aria-hidden
       />
-      {/* texto: #FF00AA recortado pela luz; fora da luz some (= preto sobre preto) */}
+      {/* texto rosa, recortado pelo mesmo disco (some fora da luz) */}
       <p
         aria-hidden
-        className="relative z-10 max-w-2xl text-center font-display text-2xl leading-relaxed text-rosa md:text-3xl"
-        style={maskStyle}
+        className="relative z-10 max-w-2xl px-8 text-center font-display text-2xl leading-relaxed text-rosa md:text-3xl"
+        style={{
+          WebkitMaskImage:
+            "radial-gradient(circle var(--r) at var(--x) var(--y), #000 55%, rgba(0,0,0,0.5) 70%, transparent 82%)",
+          maskImage:
+            "radial-gradient(circle var(--r) at var(--x) var(--y), #000 55%, rgba(0,0,0,0.5) 70%, transparent 82%)",
+        }}
       >
         {text}
       </p>

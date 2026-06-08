@@ -3,7 +3,8 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
 import { motion, useMotionValue, useSpring } from "framer-motion";
 
-const SPRING = { mass: 0.1, damping: 18, stiffness: 220 };
+// Spring mais firme: menos "deslize"/arraste, segue o cursor mais de perto.
+const SPRING = { mass: 0.08, damping: 26, stiffness: 520 };
 
 const FINE_QUERY = "(pointer: fine)";
 function subscribeFine(cb: () => void): () => void {

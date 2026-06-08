@@ -23,7 +23,7 @@ export const SCENARIOS: Scenario[] = [
     prompt:
       "Aparece alguém com uma ideia fora da caixa, fora do quadrado dela. O que rola, de verdade?",
     options: [
-      { key: "a", text: 'Vira ideia pra "depois" — ninguém recusa, mas também não vai.' },
+      { key: "a", text: "Vira ideia pra “depois” — ninguém recusa, mas também não vai." },
       { key: "b", text: "Passa por reunião de validação até virar (ou não virar) projeto." },
       { key: "c", text: "A pessoa é incentivada a tocar, com tempo protegido pra isso." },
       { key: "d", text: "Depende de quem é a pessoa e do humor da semana." },

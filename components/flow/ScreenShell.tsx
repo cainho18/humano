@@ -44,10 +44,11 @@ export function ScreenShell({
       exit={{ opacity: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className={cn(
-        "relative min-h-dvh w-full",
+        // flex-col + my-auto no conteúdo: centra quando cabe, rola natural
+        // (scroll do documento) quando é alto — sem nested-scroll travado.
+        "relative flex min-h-dvh w-full flex-col",
         BG[bg],
-        scroll ? "overflow-y-auto" : "overflow-hidden",
-        center && "flex flex-col items-center justify-center",
+        !scroll && "overflow-hidden",
         "px-[var(--gutter)] py-24",
         className
       )}
@@ -61,7 +62,9 @@ export function ScreenShell({
           }}
         />
       )}
-      <div className="relative z-10 w-full">{children}</div>
+      <div className={cn("relative z-10 w-full", center && "my-auto")}>
+        {children}
+      </div>
     </motion.div>
   );
 }

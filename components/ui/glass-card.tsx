@@ -11,13 +11,20 @@ export function GlassCard({
   return (
     <div
       className={cn(
-        "relative rounded-2xl border border-claro/15 bg-black/45 px-6 py-7 backdrop-blur-md",
-        "shadow-[0_8px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(242,242,242,0.12)]",
-        "supports-[backdrop-filter]:bg-black/35",
+        // vidro de verdade: bem translúcido + blur forte (deixa o fundo
+        // vivo atravessar borrado) + borda interna de luz (refração).
+        "relative rounded-2xl border border-claro/20 bg-black/30 px-6 py-7 backdrop-blur-xl",
+        "shadow-[0_10px_44px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(242,242,242,0.18),inset_0_0_0_1px_rgba(242,242,242,0.04)]",
+        "supports-[backdrop-filter]:bg-black/20",
         className
       )}
     >
-      {children}
+      {/* leve brilho diagonal de vidro */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 rounded-2xl bg-gradient-to-br from-claro/[0.06] to-transparent"
+      />
+      <div className="relative">{children}</div>
     </div>
   );
 }

@@ -45,8 +45,11 @@ export const SCENARIO_WEIGHTS: Record<"a" | "b" | "c" | "d", number> = {
   d: 95,
 };
 
-/** likert 5 pontos → 0..100 (§1.4 e §1.7). */
+/** likert 5 pontos → 0..100 (§1.4 e §1.7) — usado nos estruturais (S1..S11). */
 export const LIKERT5 = [0, 25, 50, 75, 100] as const;
+
+/** likert 4 pontos → 0..100 — usado nos comportamentos (90 dias). */
+export const LIKERT4 = [0, 33, 67, 100] as const;
 
 /** faixas do Qualificador Estrutural (§3). */
 export const QE_BANDS = { green: 67, yellow: 34 } as const;

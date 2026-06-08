@@ -4,7 +4,7 @@
  */
 
 import type { Answers } from "../types";
-import { DimKey, LIKERT5, SCENARIO_WEIGHTS, WEIGHT } from "./config";
+import { DimKey, LIKERT4, LIKERT5, SCENARIO_WEIGHTS, WEIGHT } from "./config";
 
 // ── acessores normalizados (0–100, "humanidade" no item) ─────────────
 const num = (v: number | undefined): number | undefined =>
@@ -12,7 +12,9 @@ const num = (v: number | undefined): number | undefined =>
 
 function scen(a: Answers, id: string): number | undefined {
   const k = a.scenarios[id];
-  return k ? SCENARIO_WEIGHTS[k] : undefined;
+  // "e" (outro cenário) é qualitativo — não pontua.
+  if (!k || k === "e") return undefined;
+  return SCENARIO_WEIGHTS[k];
 }
 /** slider bruto 0=humano..100=máquina → humanidade = 100 - valor. */
 function sliderHum(a: Answers, id: number): number | undefined {
@@ -25,7 +27,8 @@ function prio(a: Answers, cat: string): number | undefined {
 function beh(a: Answers, id: string, inverted = false): number | undefined {
   const i = a.behaviors[id];
   if (i == null) return undefined;
-  const v = LIKERT5[i];
+  // comportamentos usam escala de 4 pontos (índice 0..3)
+  const v = LIKERT4[Math.min(i, LIKERT4.length - 1)];
   return inverted ? 100 - v : v;
 }
 function struct(a: Answers, n: number): number | undefined {
