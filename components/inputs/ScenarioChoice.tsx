@@ -51,7 +51,7 @@ export function ScenarioChoice({
       >
         {scenario.prompt}
       </legend>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-6">
         {options.map((opt, i) => {
           const active = value === opt.key;
           return (
@@ -118,7 +118,7 @@ export function ScenarioChoice({
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
-            className="flex flex-col gap-3 overflow-hidden pl-9"
+            className="-mt-2 flex flex-col gap-3 overflow-hidden"
           >
             <textarea
               value={otherText}

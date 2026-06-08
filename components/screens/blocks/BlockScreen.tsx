@@ -231,7 +231,7 @@ export function BlockScreen({ block }: { block: BlockId }) {
           <div className="hw-rule" />
         </header>
         {body}
-        <div className="sticky bottom-6 z-20 flex items-center justify-between gap-4 pt-4">
+        <div className="mt-2 flex items-center justify-between gap-4 pt-4">
           <span className="hw-kicker text-claro/30">
             {complete ? "completo" : "responde tudo pra seguir"}
           </span>

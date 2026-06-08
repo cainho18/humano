@@ -6,14 +6,17 @@ import { cn } from "@/lib/cn";
 interface FlashlightTextProps {
   text: string;
   className?: string;
-  /** raio da luz em px */
+  /** raio do furo em px */
   radius?: number;
 }
 
 /**
- * Lanterna: fundo preto; um disco de luz CLARO (#F2F2F2) segue o cursor e
- * revela o texto em #FF00AA só dentro dele. Borda do disco bem suave (sem
- * "quina" retangular) — a luz e o texto usam o MESMO gradiente radial.
+ * Lanterna (modelo "Excluir"): três camadas empilhadas —
+ *   1) fundo CLARO (#F2F2F2)
+ *   2) o texto em ROSA (#FF00AA) sobre o claro
+ *   3) uma camada PRETA (#000) por cima cobrindo tudo
+ * O cursor "exclui" um círculo da camada preta (máscara com furo), revelando
+ * o que está embaixo. Borda do furo bem suave. Fora do cursor: tudo preto.
  */
 export function FlashlightText({
   text,
@@ -53,6 +56,10 @@ export function FlashlightText({
     };
   }, [radius]);
 
+  // máscara da camada preta: furo (transparente) no cursor, opaca em volta
+  const holeMask =
+    "radial-gradient(circle var(--r) at var(--x) var(--y), transparent 0%, transparent 56%, #000 80%)";
+
   return (
     <div
       ref={wrapRef}
@@ -62,28 +69,23 @@ export function FlashlightText({
       )}
       aria-label={text}
     >
-      {/* disco de luz claro — borda bem suave, sem quina */}
-      <div
-        className="pointer-events-none absolute inset-0 z-0"
-        style={{
-          background:
-            "radial-gradient(circle var(--r) at var(--x) var(--y), #f2f2f2 0%, #f2f2f2 55%, rgba(242,242,242,0.55) 70%, transparent 82%)",
-        }}
-        aria-hidden
-      />
-      {/* texto rosa, recortado pelo mesmo disco (some fora da luz) */}
+      {/* 1) fundo claro */}
+      <div className="pointer-events-none absolute inset-0 bg-claro" aria-hidden />
+
+      {/* 2) texto rosa sobre o claro */}
       <p
         aria-hidden
-        className="relative z-10 max-w-2xl px-8 text-center font-display text-2xl leading-relaxed text-rosa md:text-3xl"
-        style={{
-          WebkitMaskImage:
-            "radial-gradient(circle var(--r) at var(--x) var(--y), #000 55%, rgba(0,0,0,0.5) 70%, transparent 82%)",
-          maskImage:
-            "radial-gradient(circle var(--r) at var(--x) var(--y), #000 55%, rgba(0,0,0,0.5) 70%, transparent 82%)",
-        }}
+        className="pointer-events-none relative z-10 max-w-2xl px-8 text-center font-display text-2xl leading-relaxed text-rosa md:text-3xl"
       >
         {text}
       </p>
+
+      {/* 3) camada preta por cima, com furo no cursor (exclude) */}
+      <div
+        className="pointer-events-none absolute inset-0 z-20 bg-preto"
+        style={{ WebkitMaskImage: holeMask, maskImage: holeMask }}
+        aria-hidden
+      />
     </div>
   );
 }

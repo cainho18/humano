@@ -27,32 +27,29 @@ const DEFAULT_BLOBS: Blob[] = [
   { size: 58, x: "44%", y: "85%" },
 ];
 
-type ShapeKind = "square" | "triangle" | "ring";
+type ShapeKind = "square" | "triangle";
 interface Shape {
   kind: ShapeKind;
   size: number;
   x: string;
   y: string;
-  color: string;
   rotate: number;
-  dur: number;
 }
 
-/** Elementos geométricos decorativos no fundo (quadrados, triângulos, anéis). */
-const SHAPES: Shape[] = [
-  { kind: "square", size: 46, x: "16%", y: "30%", color: "#ffff00", rotate: 12, dur: 9 },
-  { kind: "triangle", size: 52, x: "72%", y: "28%", color: "#ff00aa", rotate: -8, dur: 11 },
-  { kind: "ring", size: 40, x: "26%", y: "78%", color: "#f2f2f2", rotate: 0, dur: 8 },
-  { kind: "square", size: 34, x: "88%", y: "82%", color: "#f2f2f2", rotate: 24, dur: 12 },
-  { kind: "triangle", size: 38, x: "10%", y: "52%", color: "#ffff00", rotate: 16, dur: 10 },
-  { kind: "ring", size: 56, x: "66%", y: "86%", color: "#ff00aa", rotate: 0, dur: 13 },
-  { kind: "square", size: 26, x: "56%", y: "18%", color: "#ff00aa", rotate: -18, dur: 9.5 },
-  { kind: "triangle", size: 30, x: "92%", y: "46%", color: "#f2f2f2", rotate: 6, dur: 10.5 },
+/** Quadrados e triângulos — MESMA natureza das bolas: arrastáveis, preenchidos
+ *  na cor da paleta, espalhados ao redor (só não entram no metaball, pra
+ *  manterem a forma). */
+const DEFAULT_SHAPES: Shape[] = [
+  { kind: "square", size: 64, x: "20%", y: "24%", rotate: 14 },
+  { kind: "triangle", size: 76, x: "74%", y: "20%", rotate: -6 },
+  { kind: "square", size: 50, x: "30%", y: "72%", rotate: -12 },
+  { kind: "triangle", size: 60, x: "80%", y: "78%", rotate: 8 },
+  { kind: "square", size: 40, x: "60%", y: "12%", rotate: 24 },
 ];
 
 /**
- * Bolas arrastáveis que se fundem (metaball via filtro SVG). Todas draggable;
- * ficam ao redor do conteúdo central.
+ * Bolas arrastáveis que se fundem (metaball via filtro SVG) + quadrados e
+ * triângulos arrastáveis (mesma cor/interação). Tudo ao redor do conteúdo.
  */
 export function GooeyDrag({
   className,
@@ -64,43 +61,6 @@ export function GooeyDrag({
 
   return (
     <div className={cn("relative h-full w-full overflow-hidden", className)}>
-      {/* elementos geométricos decorativos (quadrados, triângulos, anéis) */}
-      <div className="pointer-events-none absolute inset-0" aria-hidden>
-        {SHAPES.map((s, i) => (
-          <motion.div
-            key={i}
-            className="absolute"
-            style={{ left: s.x, top: s.y, width: s.size, height: s.size }}
-            initial={{ rotate: s.rotate }}
-            animate={{ y: [0, -14, 0], rotate: [s.rotate, s.rotate + 8, s.rotate] }}
-            transition={{ duration: s.dur, repeat: Infinity, ease: "easeInOut" }}
-          >
-            {s.kind === "square" && (
-              <div
-                className="h-full w-full"
-                style={{ border: `2px solid ${s.color}`, opacity: 0.28 }}
-              />
-            )}
-            {s.kind === "ring" && (
-              <div
-                className="h-full w-full rounded-full"
-                style={{ border: `2px solid ${s.color}`, opacity: 0.28 }}
-              />
-            )}
-            {s.kind === "triangle" && (
-              <div
-                className="h-full w-full"
-                style={{
-                  background: s.color,
-                  opacity: 0.22,
-                  clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)",
-                }}
-              />
-            )}
-          </motion.div>
-        ))}
-      </div>
-
       <svg
         className="absolute h-0 w-0"
         aria-hidden
@@ -120,6 +80,7 @@ export function GooeyDrag({
         </defs>
       </svg>
 
+      {/* círculos — metaball */}
       <div className="absolute inset-0" style={{ filter: `url(#${filterId})` }}>
         {blobs.map((b, i) => (
           <motion.div
@@ -135,6 +96,32 @@ export function GooeyDrag({
               width: b.size,
               height: b.size,
               background: color,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* quadrados e triângulos — arrastáveis, mesma cor (fora do metaball) */}
+      <div className="absolute inset-0">
+        {DEFAULT_SHAPES.map((s, i) => (
+          <motion.div
+            key={i}
+            drag
+            dragMomentum={false}
+            whileDrag={{ scale: 1.15 }}
+            whileHover={{ scale: 1.06 }}
+            className="absolute cursor-grab touch-none active:cursor-grabbing"
+            style={{
+              left: s.x,
+              top: s.y,
+              width: s.size,
+              height: s.size,
+              rotate: s.rotate,
+              background: color,
+              clipPath:
+                s.kind === "triangle"
+                  ? "polygon(50% 0%, 100% 100%, 0% 100%)"
+                  : undefined,
             }}
           />
         ))}
