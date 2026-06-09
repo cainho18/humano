@@ -108,7 +108,6 @@ export function Corpo({ vm }: { vm: FinalViewModel }) {
     () => new Set(reduced ? allChaves : [])
   );
   const [focused, setFocused] = useState<string | null>(null);
-  const [mode, setMode] = useState<"panorama" | "reativo">("panorama");
 
   const subCol = ["vinculo", "cuidado", "originalidade"]
     .map((c) => techs.find((t) => t.chave === c))
@@ -168,25 +167,6 @@ export function Corpo({ vm }: { vm: FinalViewModel }) {
           <b className="text-amarelo">clique</b> numa tecnologia pra destacá-la — as outras desfocam.
         </p>
 
-        <div className="fnl-cp-up mt-6 flex gap-2">
-          {(["panorama", "reativo"] as const).map((m) => (
-            <button
-              key={m}
-              type="button"
-              onClick={() => setMode(m)}
-              aria-pressed={mode === m}
-              className={cn(
-                "fnt-mono cursor-pointer rounded-full border px-3.5 py-1.5 text-[11px] uppercase tracking-[0.06em] transition-colors",
-                mode === m
-                  ? "border-amarelo bg-amarelo text-preto"
-                  : "border-claro/20 text-claro/55 hover:border-claro/45"
-              )}
-            >
-              {m === "panorama" ? "panorama — todas" : "reativo — uma a uma"}
-            </button>
-          ))}
-        </div>
-
         <div className="mt-9 grid items-start gap-7 md:grid-cols-[1fr_330px_1fr]">
           <div className="order-2 flex flex-col gap-4 md:order-1">
             {subCol.map((t) => (
@@ -198,7 +178,6 @@ export function Corpo({ vm }: { vm: FinalViewModel }) {
               techs={techs}
               lit={lit}
               focused={focused}
-              mode={mode}
               onFocus={setFocused}
             />
           </div>

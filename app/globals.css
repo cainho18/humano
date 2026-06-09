@@ -381,3 +381,53 @@ html {
   outline: 2px solid var(--color-amarelo);
   outline-offset: 2px;
 }
+
+/* ───────────────────────── print → PDF do relatório ────────────────────────
+ * Botão "baixar PDF" chama window.print(). Aqui a tela final vira um documento:
+ * neutraliza estados iniciais do GSAP (opacity/transform/filter), expande os
+ * cards colapsáveis, despina a frequência e esconde o chrome decorativo.
+ * ------------------------------------------------------------------------- */
+@media print {
+  .hw-noprint,
+  .hw-edge-blur,
+  .fnl-progress {
+    display: none !important;
+  }
+
+  /* preserva o fundo preto + as 4 cores no PDF */
+  html,
+  body,
+  .fnl {
+    background: #000 !important;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  /* desfaz qualquer estado de animação que tenha sobrado */
+  .fnl,
+  .fnl * {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    animation: none !important;
+    transition: none !important;
+  }
+
+  /* expande todos os cards (o que é / por que / pontos) */
+  .fnl [role="region"] {
+    grid-template-rows: 1fr !important;
+  }
+
+  /* despina a frequência e relaxa as alturas de viewport */
+  .fnl-fq-inner {
+    position: static !important;
+    min-height: 0 !important;
+    padding-top: 2rem !important;
+    padding-bottom: 2rem !important;
+  }
+  .fnl section {
+    min-height: 0 !important;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+}

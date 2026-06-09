@@ -8,7 +8,6 @@ import { ArrowUpRight } from "lucide-react";
 
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { FINAL_COPY } from "@/lib/content/final";
-import { GZeroMark } from "@/components/ui/gzero-mark";
 import type { FinalViewModel } from "../adapter";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
@@ -113,8 +112,8 @@ export function Salto({ vm }: { vm: FinalViewModel }) {
           </div>
         )}
 
-        {/* CTA + fechamento */}
-        <div className="fnl-sl-up mt-14 flex flex-col items-center gap-8 text-center">
+        {/* CTA */}
+        <div className="fnl-sl-up mt-14 flex flex-col items-center text-center">
           <a
             href="#"
             className="group inline-flex items-center gap-3 rounded-full border-2 border-rosa bg-rosa px-7 py-4 text-lg font-bold text-preto transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] active:scale-[0.98] fnt-body"
@@ -124,15 +123,6 @@ export function Salto({ vm }: { vm: FinalViewModel }) {
               <ArrowUpRight size={18} strokeWidth={2.5} />
             </span>
           </a>
-          <div className="flex items-center gap-2 border-t border-claro/10 pt-7">
-            <span className="fnt-mono text-[11px] uppercase tracking-[0.2em] text-claro/40">
-              pesquisa humanware® · seu perfil organizacional
-            </span>
-            <span className="text-claro/20" aria-hidden>
-              ·
-            </span>
-            <GZeroMark className="h-2.5 text-claro/55" />
-          </div>
         </div>
       </div>
     </section>

@@ -28,6 +28,8 @@ export function CardScreen({ field }: { field: CardField }) {
     label: CARD_LABEL[field],
   };
   const def = CARDS[field];
+  // prompts longos (ex.: fora/dentro) precisam de mais altura pra não estourar
+  const cardMinH = def.prompt.length > 150 ? 560 : 440;
   const [flipped, setFlipped] = useState(false);
   const intro = field === "nome_secreto" ? voc(CARD4_INTRO) : null;
   const value = respostas.cards[field];
@@ -50,7 +52,7 @@ export function CardScreen({ field }: { field: CardField }) {
               "hw-flip-inner relative w-full",
               flipped && "is-flipped"
             )}
-            style={{ minHeight: 440 }}
+            style={{ minHeight: cardMinH }}
           >
             {/* FRENTE: o verso da carta (mágica) */}
             <button
@@ -84,12 +86,12 @@ export function CardScreen({ field }: { field: CardField }) {
                   )}
                   <p
                     className="hw-title text-claro"
-                    style={{ fontSize: "var(--text-h3)" }}
+                    style={{ fontSize: "var(--text-h3)", lineHeight: 1.16 }}
                   >
                     {def.prompt}
                   </p>
                   {def.sub && (
-                    <p className="font-mono text-xs leading-relaxed text-claro/60">
+                    <p className="mt-1 font-mono text-xs leading-relaxed text-claro/60">
                       {def.sub}
                     </p>
                   )}

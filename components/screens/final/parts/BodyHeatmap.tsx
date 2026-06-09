@@ -24,25 +24,18 @@ interface BodyHeatmapProps {
   lit: Set<string>;
   /** chave em foco (clique num card) */
   focused: string | null;
-  mode: "panorama" | "reativo";
   onFocus: (chave: string | null) => void;
 }
 
 /** Figura (camada de baixo) + 6 zonas-chakra (camadas por cima, blend screen). */
-export function BodyHeatmap({
-  techs,
-  lit,
-  focused,
-  mode,
-  onFocus,
-}: BodyHeatmapProps) {
+export function BodyHeatmap({ techs, lit, focused, onFocus }: BodyHeatmapProps) {
   const anyFocus = focused != null;
 
   function zoneOpacity(t: TechVM): number {
     if (!lit.has(t.chave)) return 0;
     const base = baseOpacity(t.nivel);
     if (focused === t.chave) return Math.min(1, base + 0.3);
-    if (mode === "reativo") return anyFocus ? 0.05 : 0.06;
+    // foco num card → as demais zonas esmaecem (mas permanecem)
     return anyFocus ? base * 0.4 : base;
   }
 

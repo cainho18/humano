@@ -7,6 +7,7 @@ import { ProgressBar } from "@/components/flow/ProgressBar";
 import { JesterOverlay } from "@/components/flow/JesterOverlay";
 import { RetroMap } from "@/components/flow/RetroMap";
 import { Signature } from "@/components/flow/Signature";
+import { EdgeBlur } from "@/components/ui/edge-blur";
 
 import { LogoLoader } from "@/components/screens/opening/LogoLoader";
 import { OpeningPortal } from "@/components/screens/opening/OpeningPortal";
@@ -64,6 +65,8 @@ export function FlowController() {
 
   // a tela final é uma página própria, publicável — sem chrome da pesquisa
   const isFinal = step.kind === "final";
+  // edge blur em toda a pesquisa, menos na página inicial (loader/portal)
+  const showEdgeBlur = step.kind !== "counter" && step.kind !== "portal";
 
   return (
     <div className="relative min-h-dvh w-full">
@@ -71,6 +74,7 @@ export function FlowController() {
       <AnimatePresence mode="wait">
         {cloneElement(screen, { key: stepIndex })}
       </AnimatePresence>
+      {showEdgeBlur && <EdgeBlur />}
       {!isFinal && <RetroMap />}
       <JesterOverlay />
       <Signature />

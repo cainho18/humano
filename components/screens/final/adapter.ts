@@ -8,11 +8,15 @@ import type { Diagnostic } from "@/lib/scoring";
 import type { HumanwareView, Vetor } from "@/lib/scoring/humanware";
 import {
   ARQUETIPOS,
+  ARQ_CONTEUDO,
+  CONTEUDOS,
   ESTADO_NOTA,
   GRAVIDADE_ESTADO,
   PERM_INFO,
   TECH_INFO,
+  TEC_CONTEUDO,
   type ArquetipoCopy,
+  type Conteudo,
 } from "@/lib/content/final";
 
 /** nível abaixo disto = bug (brecha); igual/acima = firewall (proteção). */
@@ -50,12 +54,18 @@ export interface SaltoVM {
   caminho: string[];
 }
 
+/** pílula de conteúdo + por que ela foi indicada a este perfil */
+export interface PillVM extends Conteudo {
+  motivo: string;
+}
+
 export interface FinalViewModel {
   arquetipo: { nome: string; essencia: string; copy: ArquetipoCopy };
   gravidade: { g: number; estado: string; descricao: string; fillPct: number };
   tecnologias: TechVM[];
   bugs: BFVM[];
   salto: SaltoVM;
+  conteudos: PillVM[];
 }
 
 const FALLBACK: ArquetipoCopy = {
@@ -154,5 +164,46 @@ export function buildFinalView(
     caminho: rx.caminho_upsell,
   };
 
-  return { arquetipo: { nome, essencia: copy.essencia, copy }, gravidade, tecnologias, bugs, salto };
+  // ── conteúdos (4 pílulas conforme o perfil) ──
+  // 1 da identidade do arquétipo + 3 das tecnologias mais frágeis (deduplicado).
+  const fracas = [...tecnologias]
+    .sort((a, b) => a.nivel - b.nivel)
+    .map((t) => t.chave);
+
+  const picks: PillVM[] = [];
+  const usados = new Set<string>();
+  const add = (id: string | undefined, motivo: string) => {
+    if (!id || usados.has(id)) return;
+    const c = CONTEUDOS[id];
+    if (!c) return;
+    usados.add(id);
+    picks.push({ ...c, motivo });
+  };
+
+  add(ARQ_CONTEUDO[nome], `pra quem é ${nome}`);
+  for (const chave of fracas) {
+    if (picks.length >= 4) break;
+    const tec = tecnologias.find((t) => t.chave === chave);
+    add(
+      TEC_CONTEUDO[chave],
+      tec ? `pra fortalecer ${tec.nome.toLowerCase()}` : "pra crescer"
+    );
+  }
+  // garante 4 cards mesmo se houver colisões
+  if (picks.length < 4) {
+    for (const id of Object.keys(CONTEUDOS)) {
+      if (picks.length >= 4) break;
+      add(id, "leitura pro próximo salto");
+    }
+  }
+  const conteudos = picks.slice(0, 4);
+
+  return {
+    arquetipo: { nome, essencia: copy.essencia, copy },
+    gravidade,
+    tecnologias,
+    bugs,
+    salto,
+    conteudos,
+  };
 }

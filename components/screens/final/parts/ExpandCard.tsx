@@ -1,6 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/cn";
 
 interface ExpandCardProps {
@@ -43,6 +44,9 @@ export function ExpandCard({
       <div
         id={panelId}
         role="region"
+        // ao terminar a expansão/colapso, recomputa os gatilhos de scroll
+        // (evita que seções pinadas abaixo fiquem com posição stale → overlap)
+        onTransitionEnd={() => ScrollTrigger.refresh()}
         className={cn(
           "grid transition-[grid-template-rows] duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)]",
           open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"

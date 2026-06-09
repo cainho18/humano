@@ -95,11 +95,13 @@ export function Frequencia({ vm }: { vm: FinalViewModel }) {
         <div className="mt-10 grid items-center gap-12 md:grid-cols-2">
           {/* readout de gravidade */}
           <div className="fnl-fq-up">
-            <div className="fnt-mono text-xs uppercase tracking-[0.22em] text-claro/55">
-              Gravidade
-            </div>
-            <div className="fnt-disp mt-1 text-[clamp(4.5rem,9vw,7rem)] leading-[0.82] text-rosa">
-              {g}
+            <div className="flex items-baseline gap-3">
+              <span className="fnt-disp text-[clamp(1.5rem,3.2vw,2.4rem)] leading-none text-claro/70">
+                Gravidade
+              </span>
+              <span className="fnt-disp text-[clamp(4.5rem,9vw,7rem)] leading-[0.82] text-rosa">
+                {g}
+              </span>
             </div>
             <div className="fnt-cond mt-2 text-3xl text-claro">{estado}</div>
             <p className="fnt-body mt-3 max-w-[36ch] text-[15px] leading-relaxed text-claro/75">

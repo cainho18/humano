@@ -339,4 +339,166 @@ export const FINAL_COPY = {
     eyebrow: "o primeiro salto",
     narr: "Pelo que vi, o caminho de vocês até a Gravidade Zero começa por aqui.",
   },
+  conteudos: {
+    eyebrow: "pra levar com você",
+    narr: "Quatro leituras do Awakening escolhidas pelo perfil de vocês — pra continuar a travessia depois daqui.",
+  },
 } as const;
+
+/* ───────────────────────────── conteúdos (pílulas) ─────────────────────────
+ * Biblioteca de leituras do AWAKENING (GZero). Cada pílula nutre uma tecnologia
+ * humana ou conversa com um arquétipo. A seleção dos 4 cards é feita no adapter
+ * conforme o perfil (arquétipo + tecnologias mais frágeis). Textos destilados
+ * do material original da GZero.
+ * ------------------------------------------------------------------------- */
+
+export interface Conteudo {
+  id: string;
+  titulo: string;
+  /** macro-tendência (trilha do AWAKENING) */
+  trilha: string;
+  /** submanchete */
+  manchete: string;
+  /** resumo em 1–2 frases */
+  resumo: string;
+}
+
+export const CONTEUDOS: Record<string, Conteudo> = {
+  // — por tecnologia —
+  knot: {
+    id: "knot",
+    titulo: "Knot: Emaranhado Coletivo",
+    trilha: "Awakening",
+    manchete: "A interdependência como principal atributo da revolução.",
+    resumo:
+      "Nenhuma ação vive só em si — tudo o que vocês decidem reverbera no emaranhado do todo. Despertar para a interdependência é o que transforma concorrência em parceria.",
+  },
+  multilogias: {
+    id: "multilogias",
+    titulo: "As multilogias",
+    trilha: "Todos são educadores",
+    manchete: "Não existe a verdade. Existem as verdades.",
+    resumo:
+      "Cultura única nunca existiu — toda organização é feita de muitas verdades convivendo. O futuro pede espaço para a pluralidade, não muralhas ideológicas.",
+  },
+  autonomos: {
+    id: "autonomos",
+    titulo: "Seres humanos autônomos",
+    trilha: "Coletivo Exponencial",
+    manchete: "O valor da interdependência numa era de empresas sem pessoas.",
+    resumo:
+      "Autonomia não é fazer tudo sozinho — é ter consciência de que seu trabalho impacta e é impactado pelos outros. A autonomia real mora na interdependência.",
+  },
+  brilhar: {
+    id: "brilhar",
+    titulo: "Brilhar dentro para iluminar fora",
+    trilha: "Curar-se",
+    manchete: "A evolução coletiva dentro de cada um de nós.",
+    resumo:
+      "A transformação do todo começa no nível individual: quem se cuida e se ilumina por dentro acaba iluminando quem está ao redor. Do “ver para crer” ao “crer para ver”.",
+  },
+  opensource: {
+    id: "opensource",
+    titulo: "Open source da vida real",
+    trilha: "Todos são o que quiserem",
+    manchete: "Programe o que quiser.",
+    resumo:
+      "O futuro aponta para o aberto e o descentralizado: qualquer pessoa poderá dar vida às próprias ideias sem depender de grandes estruturas. Transparência e autoria viram base da criação.",
+  },
+  liquido: {
+    id: "liquido",
+    titulo: "Liderar é um estado líquido",
+    trilha: "Coletivo Exponencial",
+    manchete: "A lógica das responsabilidades dinâmicas.",
+    resumo:
+      "Liderança deixa de ser cargo e vira estado: flui pela missão, pela paixão e pela capacidade de cada momento. Distribuir responsabilidade alivia o ponto único e move a organização como organismo vivo.",
+  },
+
+  // — por arquétipo —
+  "maquina-lugar": {
+    id: "maquina-lugar",
+    titulo: "A máquina retomando seu lugar",
+    trilha: "Eu Exponencial",
+    manchete: "E o papel do ser humano.",
+    resumo:
+      "Eficiência é linguagem de máquina — esse é o espaço dela, não o de vocês. O papel humano é o do sentir, da intuição e do significado para além do processo.",
+  },
+  ancestral: {
+    id: "ancestral",
+    titulo: "O futuro é ancestral",
+    trilha: "Todos são o que quiserem",
+    manchete: "O retorno às origens nos leva ao encontro de quem somos.",
+    resumo:
+      "Tanta tecnologia nova também pode nos afastar de nós mesmos. A linha de chegada talvez não esteja à frente, mas atrás — nas tecnologias humanas e naturais que já nos formaram.",
+  },
+  curador: {
+    id: "curador",
+    titulo: "Curador da própria vida",
+    trilha: "Todos são o que quiserem",
+    manchete: "Coerência e impecabilidade.",
+    resumo:
+      "Numa era em que tudo vira input, curar as próprias escolhas vira ato de cuidado. Coerência com quem se é importa mais do que a vitrine que se mostra.",
+  },
+  filosofos: {
+    id: "filosofos",
+    titulo: "Filósofos agilistas",
+    trilha: "Awakening",
+    manchete: "Transformar filosofia em design para criar futuros significativos.",
+    resumo:
+      "Quando a IA entrega respostas binárias, é o humano filosófico que imprime sentido. Refletir com ética e, ao mesmo tempo, desenhar soluções práticas e ágeis.",
+  },
+  monocultura: {
+    id: "monocultura",
+    titulo: "O fim da monocultura organizacional",
+    trilha: "Todos são educadores",
+    manchete: "A saúde depende da diversidade.",
+    resumo:
+      "Assim como a monocultura esgota o solo, a cultura única empobrece a organização. Microculturas que convivem deixam o todo mais fértil, flexível e vivo.",
+  },
+  decrescimento: {
+    id: "decrescimento",
+    titulo: "Decrescimento Exponencial",
+    trilha: "Coletivo Exponencial",
+    manchete: "Mais coerência, menos recursos.",
+    resumo:
+      "Crescer não é acumular recursos. Conforme a tecnologia avança, a tendência é fazer mais com menos — decrescer em alocação e crescer em exponencialidade e coerência.",
+  },
+  molegolar: {
+    id: "molegolar",
+    titulo: "Empresas moLEGOlares",
+    trilha: "Mundo Distribuído",
+    manchete: "A desfragmentação das big companies.",
+    resumo:
+      "O grande monolítico dá lugar a estruturas leves e modulares, como uma colmeia de autônomos com propósito comum. Soltar os “saquinhos de areia” é o que devolve altitude.",
+  },
+  work: {
+    id: "work",
+    titulo: "Work isn’t working",
+    trilha: "Awakening",
+    manchete: "Repensar o futuro do trabalho — tecnologia, humanidade e saúde mental.",
+    resumo:
+      "Adoecimento e desinteresse mostram que o trabalho está em dessintonia com a humanidade. Reimaginar o trabalho é reconhecer a máquina e, ao mesmo tempo, valorizar a vocação humana.",
+  },
+} as const;
+
+/** tecnologia humana (chave) → pílula que a nutre */
+export const TEC_CONTEUDO: Record<string, string> = {
+  consciencia: "knot",
+  dialogo: "multilogias",
+  vinculo: "autonomos",
+  cuidado: "brilhar",
+  originalidade: "opensource",
+  autogestao: "liquido",
+};
+
+/** arquétipo → pílula de identidade */
+export const ARQ_CONTEUDO: Record<string, string> = {
+  "Maquinário": "maquina-lugar",
+  "Ofício": "ancestral",
+  "Vitrine": "curador",
+  "Chama": "filosofos",
+  "Família": "monocultura",
+  "Vilarejo": "decrescimento",
+  "Constelação": "molegolar",
+  "Organismo": "work",
+};

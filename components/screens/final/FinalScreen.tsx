@@ -17,6 +17,8 @@ import { Frequencia } from "./sections/Frequencia";
 import { Corpo } from "./sections/Corpo";
 import { Bugs } from "./sections/Bugs";
 import { Salto } from "./sections/Salto";
+import { Conteudos } from "./sections/Conteudos";
+import { Fechamento } from "./sections/Fechamento";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -65,7 +67,7 @@ export function FinalScreen() {
     <MotionConfig reducedMotion="user">
       <div ref={root} className="fnl relative w-full bg-preto text-claro">
         {/* progresso de scroll */}
-        <div className="pointer-events-none fixed inset-x-0 top-0 z-40 h-px bg-claro/10">
+        <div className="hw-noprint pointer-events-none fixed inset-x-0 top-0 z-40 h-px bg-claro/10">
           <div
             className="fnl-progress h-full w-full origin-left bg-rosa"
             style={{ transform: reduced ? "scaleX(1)" : "scaleX(0)" }}
@@ -77,6 +79,8 @@ export function FinalScreen() {
         <Corpo vm={vm} />
         <Bugs vm={vm} />
         <Salto vm={vm} />
+        <Conteudos vm={vm} />
+        <Fechamento />
       </div>
     </MotionConfig>
   );
