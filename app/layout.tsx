@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Space_Mono, Playfair_Display } from "next/font/google";
+import {
+  Space_Grotesk,
+  Space_Mono,
+  Playfair_Display,
+  Archivo_Black,
+  Anton,
+  Spline_Sans,
+} from "next/font/google";
 import "./globals.css";
 import { CursorBall } from "@/components/ui/cursor-ball";
 import { Grain } from "@/components/ui/grain";
@@ -23,6 +30,23 @@ const serif = Playfair_Display({
   style: ["normal", "italic"],
 });
 
+// ── fontes da tela final (mundo visual próprio do resultado) ──
+const archivo = Archivo_Black({
+  variable: "--font-archivo",
+  subsets: ["latin"],
+  weight: "400",
+});
+const anton = Anton({
+  variable: "--font-anton",
+  subsets: ["latin"],
+  weight: "400",
+});
+const spline = Spline_Sans({
+  variable: "--font-spline",
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+});
+
 export const metadata: Metadata = {
   title: "HUMANWARE — o espelho",
   description:
@@ -37,7 +61,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${display.variable} ${mono.variable} ${serif.variable} h-full antialiased`}
+      className={`${display.variable} ${mono.variable} ${serif.variable} ${archivo.variable} ${anton.variable} ${spline.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-preto text-claro">
         <CursorBall />

@@ -188,6 +188,50 @@ html {
 }
 
 /* ════════════════════════════════════════════════════════════════
+   TELA FINAL — mundo visual próprio (Archivo Black / Anton / Spline)
+   ════════════════════════════════════════════════════════════════ */
+.fnl {
+  font-family: var(--font-spline), system-ui, sans-serif;
+}
+.fnt-disp {
+  font-family: var(--font-archivo), sans-serif;
+  font-weight: 400;
+}
+.fnt-cond {
+  font-family: var(--font-anton), sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+.fnt-mono {
+  font-family: var(--font-mono), monospace;
+}
+.fnt-body {
+  font-family: var(--font-spline), system-ui, sans-serif;
+}
+
+/* zona-chakra: brilho radial sobre a figura, blend screen */
+.fnl-zone {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  mix-blend-mode: screen;
+  pointer-events: none;
+  transition: opacity 0.5s ease, filter 0.45s ease, transform 0.45s ease;
+}
+@keyframes fnl-flare {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.55);
+  }
+}
+.fnl-zone.flare {
+  animation: fnl-flare 1.2s ease-in-out infinite;
+}
+
+/* ════════════════════════════════════════════════════════════════
    KEYFRAMES UTILITÁRIOS
    ════════════════════════════════════════════════════════════════ */
 @keyframes hw-pulse-down {

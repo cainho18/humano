@@ -62,13 +62,16 @@ export function FlowController() {
       break;
   }
 
+  // a tela final é uma página própria, publicável — sem chrome da pesquisa
+  const isFinal = step.kind === "final";
+
   return (
     <div className="relative min-h-dvh w-full">
-      <ProgressBar />
+      {!isFinal && <ProgressBar />}
       <AnimatePresence mode="wait">
         {cloneElement(screen, { key: stepIndex })}
       </AnimatePresence>
-      <RetroMap />
+      {!isFinal && <RetroMap />}
       <JesterOverlay />
       <Signature />
     </div>
