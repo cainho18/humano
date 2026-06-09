@@ -54,6 +54,11 @@ interface AnswersCtx {
   fireIdle: () => void;
   dismissJester: () => void;
 
+  // consentimento (LGPD)
+  consentAgreed: boolean;
+  consentAt: string | null;
+  setConsent: (agreed: boolean) => void;
+
   logSession: () => SessionData;
 }
 
@@ -73,6 +78,8 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
   const [stepIndex, setStepIndex] = useState(0);
   const [maxReached, setMaxReached] = useState(0);
   const [jesterPopup, setJesterPopup] = useState<string | null>(null);
+  const [consentAgreed, setConsentAgreed] = useState(false);
+  const [consentAt, setConsentAt] = useState<string | null>(null);
 
   // bobo telemetry
   const lastAnswerAt = useRef<number>(0);
@@ -170,6 +177,11 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
     },
     []
   );
+
+  const setConsent = useCallback((agreed: boolean) => {
+    setConsentAgreed(agreed);
+    setConsentAt(agreed ? new Date().toISOString() : null);
+  }, []);
 
   const showPopup = useCallback((id: JesterPopup["id"]) => {
     if (popupsShown.current >= MAX_POPUPS) return;
@@ -271,6 +283,9 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
       noteAnswer,
       fireIdle,
       dismissJester,
+      consentAgreed,
+      consentAt,
+      setConsent,
       logSession,
     }),
     [
@@ -296,6 +311,9 @@ export function AnswersProvider({ children }: { children: React.ReactNode }) {
       noteAnswer,
       fireIdle,
       dismissJester,
+      consentAgreed,
+      consentAt,
+      setConsent,
       logSession,
     ]
   );
