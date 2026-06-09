@@ -78,8 +78,8 @@ export function FinalScreen() {
         <Frequencia vm={vm} />
         <Corpo vm={vm} />
         <Bugs vm={vm} />
-        <Salto vm={vm} />
         <Conteudos vm={vm} />
+        <Salto vm={vm} />
         <Fechamento />
       </div>
     </MotionConfig>

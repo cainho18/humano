@@ -12,6 +12,8 @@ import type { FinalViewModel, PillVM } from "../adapter";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
+const ROMAN = ["I", "II", "III", "IV", "V", "VI"];
+
 function PillCard({ p, i }: { p: PillVM; i: number }) {
   // alterna o sotaque entre as 4 cartas, mantendo a paleta
   const accent = i % 2 === 0 ? "#FF00AA" : "#FFFF00";
@@ -22,10 +24,10 @@ function PillCard({ p, i }: { p: PillVM; i: number }) {
       <div className="flex h-full flex-col rounded-[0.95rem] bg-[linear-gradient(180deg,rgba(255,255,255,0.025),transparent)] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]">
         <div className="flex items-center justify-between gap-3">
           <span
-            className="fnt-mono rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.14em]"
+            className="fnt-mono rounded-full border px-2.5 py-1 text-[10px] uppercase tracking-[0.16em]"
             style={{ color: accent, borderColor: `${accent}55` }}
           >
-            {p.trilha}
+            carta {ROMAN[i] ?? i + 1}
           </span>
           <span
             className="flex h-7 w-7 items-center justify-center rounded-full border border-claro/15 text-claro/40 transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover/pill:-translate-y-[1px] group-hover/pill:translate-x-[1px] group-hover/pill:border-claro/35 group-hover/pill:text-claro"
