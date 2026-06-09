@@ -10,6 +10,7 @@ import { useFlow } from "@/lib/state/AnswersContext";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 import { scoreSession } from "@/lib/scoring";
 import { humanwareView } from "@/lib/scoring/humanware";
+import { submitSession } from "@/lib/supabase/submit";
 
 import { buildFinalView } from "./adapter";
 import { Retrato } from "./sections/Retrato";
@@ -26,20 +27,37 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  * adaptador; nunca recalcula o score. Mundo visual próprio (classe `.fnl`).
  */
 export function FinalScreen() {
-  const { perfil, respostas, logSession } = useFlow();
+  const { perfil, respostas, consentAgreed, consentAt, logSession } = useFlow();
   const reduced = useReducedMotion();
   const root = useRef<HTMLDivElement>(null);
 
-  const vm = useMemo(() => {
+  const { vm, diag, view } = useMemo(() => {
     const session = { perfil, respostas };
     const diag = scoreSession(session);
     const view = humanwareView(session, diag);
-    return buildFinalView(diag, view);
+    return { vm: buildFinalView(diag, view), diag, view };
   }, [perfil, respostas]);
 
+  // Persiste a sessão concluída no Supabase (uma vez, best-effort).
+  const submittedRef = useRef(false);
   useEffect(() => {
     logSession();
-  }, [logSession]);
+    if (submittedRef.current) return;
+    submittedRef.current = true;
+    const isDemo =
+      typeof window !== "undefined" &&
+      new URLSearchParams(window.location.search).get("demo") === "final";
+    void submitSession({
+      perfil,
+      respostas,
+      diagnostic: diag,
+      view,
+      consentAgreed,
+      consentAt,
+      demo: isDemo,
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // barra de progresso de scroll (rosa, topo) — preenche conforme desce
   useGSAP(

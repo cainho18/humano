@@ -13,7 +13,7 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 /** Tela 04 — o acordo (LGPD), tom GZero. Checkbox obrigatório. */
 export function AgreementScreen() {
-  const { next } = useFlow();
+  const { next, setConsent } = useFlow();
   const [agreed, setAgreed] = useState(false);
 
   return (
@@ -78,7 +78,10 @@ export function AgreementScreen() {
             fx="fill"
             accent="rosa"
             disabled={!agreed}
-            onClick={next}
+            onClick={() => {
+              setConsent(true);
+              next();
+            }}
           />
         </div>
       </motion.div>
