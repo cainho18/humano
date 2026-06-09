@@ -35,24 +35,6 @@ export function Frequencia({ vm }: { vm: FinalViewModel }) {
         scrollTrigger: { trigger: root.current, start: "top 72%" },
       });
 
-      // barra G: preenche da ponta MÁQUINA até o G, conforme o scroll
-      if (fill) {
-        gsap.fromTo(
-          fill,
-          { scaleX: 0 },
-          {
-            scaleX: fillPct / 100,
-            ease: "none",
-            scrollTrigger: {
-              trigger: ".fnl-gtrack",
-              start: "top 85%",
-              end: "top 38%",
-              scrub: 0.6,
-            },
-          }
-        );
-      }
-
       // radar: cresce do centro + vértices em stagger
       gsap.from(".fnl-radar-poly", {
         scale: 0,
@@ -69,6 +51,29 @@ export function Frequencia({ vm }: { vm: FinalViewModel }) {
         ease: "back.out(2)",
         scrollTrigger: { trigger: ".fnl-radar-wrap", start: "top 70%" },
       });
+
+      // a seção fica FIXA enquanto a barra de gravidade carrega no scroll
+      if (fill) {
+        gsap.fromTo(
+          fill,
+          { scaleX: 0 },
+          {
+            scaleX: fillPct / 100,
+            ease: "none",
+            scrollTrigger: {
+              trigger: ".fnl-fq-inner",
+              start: "top top",
+              end: "+=85%",
+              pin: true,
+              scrub: 0.5,
+            },
+          }
+        );
+      }
+
+      ScrollTrigger.refresh();
+      const id = window.setTimeout(() => ScrollTrigger.refresh(), 450);
+      return () => window.clearTimeout(id);
     },
     { scope: root, dependencies: [reduced, fillPct] }
   );
@@ -77,9 +82,9 @@ export function Frequencia({ vm }: { vm: FinalViewModel }) {
     <section
       ref={root}
       id="frequencia"
-      className="border-b border-claro/10 px-[var(--gutter)] py-24"
+      className="border-b border-claro/10 px-[var(--gutter)]"
     >
-      <div className="mx-auto max-w-5xl">
+      <div className="fnl-fq-inner mx-auto flex min-h-[100dvh] max-w-5xl flex-col justify-center py-20">
         <span className="fnl-fq-up fnt-mono block text-xs uppercase tracking-[0.2em] text-rosa">
           {FINAL_COPY.frequencia.eyebrow}
         </span>
@@ -90,8 +95,11 @@ export function Frequencia({ vm }: { vm: FinalViewModel }) {
         <div className="mt-10 grid items-center gap-12 md:grid-cols-2">
           {/* readout de gravidade */}
           <div className="fnl-fq-up">
-            <div className="fnt-disp text-[6rem] leading-[0.82] text-rosa">
-              G{g}
+            <div className="fnt-mono text-xs uppercase tracking-[0.22em] text-claro/55">
+              Gravidade
+            </div>
+            <div className="fnt-disp mt-1 text-[clamp(4.5rem,9vw,7rem)] leading-[0.82] text-rosa">
+              {g}
             </div>
             <div className="fnt-cond mt-2 text-3xl text-claro">{estado}</div>
             <p className="fnt-body mt-3 max-w-[36ch] text-[15px] leading-relaxed text-claro/75">

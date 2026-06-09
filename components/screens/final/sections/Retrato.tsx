@@ -81,15 +81,13 @@ export function Retrato({ vm }: { vm: FinalViewModel }) {
         stagger: 0.12,
         scrollTrigger: { trigger: root.current, start: "top 72%" },
       });
-      gsap.utils.toArray<HTMLElement>(".fnl-rt-card").forEach((el, i) => {
-        gsap.from(el, {
-          x: i === 0 ? -70 : i === 2 ? 70 : 0,
-          y: i === 1 ? 60 : 0,
-          opacity: 0,
-          duration: 0.95,
-          ease: "power3.out",
-          scrollTrigger: { trigger: el, start: "top 86%" },
-        });
+      gsap.from(".fnl-rt-card", {
+        x: 90,
+        opacity: 0,
+        duration: 0.85,
+        ease: "power3.out",
+        stagger: 0.14,
+        scrollTrigger: { trigger: ".fnl-rt-card", start: "top 84%" },
       });
     },
     { scope: root, dependencies: [reduced] }
@@ -114,23 +112,25 @@ export function Retrato({ vm }: { vm: FinalViewModel }) {
           </p>
         )}
 
-        <div className="fnl-rt-up mt-9 flex max-w-[62ch] flex-col gap-4">
-          {copy.retrato.map((p, i) => (
-            <p
-              key={i}
-              className={
-                i === 0
-                  ? "fnt-body text-[clamp(1.15rem,2vw,1.4rem)] font-medium leading-relaxed text-claro"
-                  : "fnt-body text-[clamp(1.05rem,1.8vw,1.2rem)] leading-relaxed text-claro/85"
-              }
-            >
-              {p}
-            </p>
-          ))}
-        </div>
+        {/* intro à esquerda · cards empilhados à direita */}
+        <div className="mt-11 grid gap-x-12 gap-y-9 md:grid-cols-[1.1fr_0.9fr]">
+          <div className="fnl-rt-up flex flex-col gap-4">
+            {copy.retrato.map((p, i) => (
+              <p
+                key={i}
+                className={
+                  i === 0
+                    ? "fnt-body text-[clamp(1.15rem,2vw,1.4rem)] font-medium leading-relaxed text-claro"
+                    : "fnt-body text-[clamp(1.05rem,1.8vw,1.2rem)] leading-relaxed text-claro/85"
+                }
+              >
+                {p}
+              </p>
+            ))}
+          </div>
 
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
-          <div className="fnl-rt-card rounded-[1.4rem] border border-amarelo/40 bg-[linear-gradient(180deg,rgba(255,255,0,0.04),transparent)] p-5">
+          <div className="flex flex-col gap-4">
+            <div className="fnl-rt-card rounded-[1.4rem] border border-amarelo/40 bg-[linear-gradient(180deg,rgba(255,255,0,0.04),transparent)] p-5">
             <ExpandCard
               label="Pontos fortes — abrir"
               header={(open) => (
@@ -174,6 +174,7 @@ export function Retrato({ vm }: { vm: FinalViewModel }) {
             >
               <ItemList items={copy.exemplos} />
             </ExpandCard>
+          </div>
           </div>
         </div>
       </div>

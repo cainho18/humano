@@ -107,35 +107,6 @@ export function RadarHex({ techs }: { techs: TechVM[] }) {
           </g>
         );
       })}
-
-      <circle
-        cx={cx}
-        cy={cy}
-        r={30}
-        fill="rgba(255,0,170,0.18)"
-        stroke="#FF00AA"
-        strokeWidth={1.5}
-      />
-      <text
-        x={cx}
-        y={cy - 1}
-        textAnchor="middle"
-        fontFamily="var(--font-mono)"
-        fontSize={9.5}
-        fill="#F2F2F2"
-      >
-        O
-      </text>
-      <text
-        x={cx}
-        y={cy + 11}
-        textAnchor="middle"
-        fontFamily="var(--font-mono)"
-        fontSize={9.5}
-        fill="#F2F2F2"
-      >
-        CAMPO
-      </text>
     </svg>
   );
 }

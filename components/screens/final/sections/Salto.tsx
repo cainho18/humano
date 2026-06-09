@@ -88,7 +88,7 @@ export function Salto({ vm }: { vm: FinalViewModel }) {
           </p>
           <p className="fnt-mono mt-3 text-sm text-claro/60">
             primeiro bug a corrigir:{" "}
-            <b className="text-rosa">{s.bugPrioridade}</b> — a brecha que mais deixa a máquina entrar.
+            <b className="text-amarelo">{s.bugPrioridade}</b> — a brecha que mais deixa a máquina entrar.
           </p>
           {s.trava && (
             <p className="fnt-mono mt-3 text-xs leading-relaxed text-amarelo/85">

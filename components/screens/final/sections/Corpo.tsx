@@ -80,14 +80,28 @@ function TechCard({
           <p className="fnt-body mt-1 text-[13px] leading-relaxed text-claro/80">
             {t.porque}
           </p>
-          <div className="mt-3 flex flex-wrap gap-1.5">
+          <div className="mt-3.5 flex flex-col gap-2.5">
             {t.dims.map((d) => (
-              <span
-                key={d}
-                className="fnt-mono rounded-md border border-claro/15 px-2 py-1 text-[11px] text-claro/75"
-              >
-                {d}
-              </span>
+              <div key={d}>
+                <div className="flex items-baseline justify-between gap-2">
+                  <span className="fnt-mono text-[11px] text-claro/75">{d}</span>
+                  <span
+                    className="fnt-mono text-[11px] font-bold tabular-nums"
+                    style={{ color: t.nivel >= 65 ? "#FFFF00" : "#FF00AA" }}
+                  >
+                    {t.nivel}
+                  </span>
+                </div>
+                <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-claro/12">
+                  <div
+                    className="h-full rounded-full"
+                    style={{
+                      width: `${t.nivel}%`,
+                      background: t.nivel >= 65 ? "#FFFF00" : "#FF00AA",
+                    }}
+                  />
+                </div>
+              </div>
             ))}
           </div>
         </div>
@@ -129,16 +143,18 @@ export function Corpo({ vm }: { vm: FinalViewModel }) {
       });
 
       gsap.utils.toArray<HTMLElement>(".fnl-tcard").forEach((el) => {
-        const side = el.dataset.side === "obj" ? 70 : -70;
+        const dir = el.dataset.side === "obj" ? 1 : -1;
         const chave = el.dataset.chave!;
+        // entra de FORA da tela (lateral) até docar ao lado da imagem
         gsap.from(el, {
-          x: side,
+          x: () => dir * (window.innerWidth * 0.62),
           opacity: 0,
-          duration: 0.7,
+          duration: 0.85,
           ease: "power3.out",
           scrollTrigger: {
             trigger: el,
-            start: "top 82%",
+            start: "top 84%",
+            invalidateOnRefresh: true,
             onEnter: () => setLit((prev) => new Set(prev).add(chave)),
           },
         });

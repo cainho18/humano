@@ -15,35 +15,32 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 function BFCard({ p }: { p: BFVM }) {
   const bug = p.tipo === "bug";
+  // firewall = heartstorm (rosa) · bug = jester (amarelo)
+  const c = bug ? "#FFFF00" : "#FF00AA";
   return (
     <div
       className={cn(
         "fnl-bf relative rounded-[1rem] border p-5",
         bug
           ? p.crit
-            ? "border-rosa bg-[rgba(255,0,170,0.10)] sm:col-span-2"
-            : "border-rosa/70"
+            ? "border-amarelo bg-[rgba(255,255,0,0.07)] sm:col-span-2"
+            : "border-amarelo/60"
           : p.strong
-            ? "border-claro/25 bg-[rgba(242,242,242,0.03)] sm:row-span-2"
-            : "border-claro/15"
+            ? "border-rosa bg-[rgba(255,0,170,0.08)] sm:row-span-2"
+            : "border-rosa/55"
       )}
     >
       <ExpandCard
-        label={`${p.nome} — ${bug ? "bug" : "firewall"} — abrir`}
+        label={`${p.nome} — ${bug ? "bug" : "firewall"}, nota ${p.nivel} — abrir`}
         header={(open) => (
           <div>
             <span
-              className={cn(
-                "fnt-mono inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.1em]",
-                bug ? "text-rosa" : "text-claro/70"
-              )}
+              className="fnt-mono inline-flex items-center gap-2 text-[10px] uppercase tracking-[0.14em]"
+              style={{ color: c }}
             >
-              <span className="text-[13px]" aria-hidden>
-                {bug ? "🐞" : "🛡"}
-              </span>
               {bug ? "bug" : "firewall"}
               {p.crit && (
-                <span className="fnt-mono rounded-[9px] bg-rosa px-2 py-[2px] text-[10px] uppercase tracking-[0.05em] text-preto">
+                <span className="fnt-mono rounded-[9px] bg-amarelo px-2 py-[2px] text-[10px] uppercase tracking-[0.05em] text-preto">
                   prioridade
                 </span>
               )}
@@ -63,6 +60,22 @@ function BFCard({ p }: { p: BFVM }) {
                 aria-hidden
               >
                 +
+              </span>
+            </div>
+
+            {/* barra da nota */}
+            <div className="mt-3 flex items-center gap-2.5">
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-claro/12">
+                <div
+                  className="h-full rounded-full"
+                  style={{ width: `${p.nivel}%`, background: c }}
+                />
+              </div>
+              <span
+                className="fnt-mono text-[12px] font-bold tabular-nums"
+                style={{ color: c }}
+              >
+                {p.nivel}
               </span>
             </div>
           </div>

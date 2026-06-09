@@ -43,16 +43,13 @@ export function BodyHeatmap({
 
   return (
     <div className="relative mx-auto w-full max-w-[340px]">
-      <div
-        className="relative w-full"
-        style={{ filter: "drop-shadow(0 0 44px rgba(255,0,170,0.22))" }}
-      >
+      <div className="relative w-full">
         <Image
           src="/corpo.webp"
           alt="Figura simbólica do corpo da organização, com zonas que acendem conforme cada tecnologia humana"
           width={433}
           height={1316}
-          className="h-auto w-full select-none opacity-90"
+          className="relative z-0 h-auto w-full select-none"
           priority={false}
         />
 
